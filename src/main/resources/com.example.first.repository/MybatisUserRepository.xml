@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.first.repository.MybatisUserRepository">
+    <resultMap id="userWithSessionMap" type="User">
+        <id     column="m_id"                       property="id"/>
+        <result column="m_name"                     property="name"/>
+        <result column="m_email"                    property="email"/>
+        <result column="m_password"                 property="password"/>
+        <result column="m_datetime"                 property="dateTime"/>
+        <collection property="sessionList" ofType="UserSession">
+            <id     column="s_id"                   property="id"/>
+            <result column="s_accessToken"          property="accessToken"/>
+            <result column="s_userid"               property="userId"/>
+        </collection>
+
+    </resultMap>
+
+    <select id="getUserWithSession" resultMap="userWithSessionMap">
+        SELECT
+            m.id AS m_id,
+            m.name AS m_name,
+            m.email AS m_email,
+            m.password AS m_password,
+            m.datetime AS m_datetime,
+            s.id AS s_id,
+            s.accesstoken AS s_accessToken,
+            s.userid AS s_userid
+        FROM
+            member m
+                LEFT JOIN
+            usersession s ON m.id = s.userid
+        WHERE
+            m.id = #{userId}
+    </select>
+</mapper>
