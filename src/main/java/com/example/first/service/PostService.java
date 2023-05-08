@@ -69,22 +69,21 @@ public class PostService {
     }
 
     public PostResponse get(Long id) {
-
         postRepository.hitPlus(id);
         Post post1 = postRepository.getPostWithFilesAndUser(id).orElseThrow(PostNotFound::new);
-        log.info(">>>>{}", post1.getUser());
+        log.info(">>>>{}", post1);
         return PostResponse.builder()
                 .id(post1.getId())
                 .title(post1.getTitle())
                 .content(post1.getContent())
                 .dateTime(post1.getDateTime())
-                .name(post1.getUser().getName())
+                .name(post1.getUser().get(0).getName())
                 .hit(post1.getHit())
                 .build();
     }
 
     public List<PostResponse> getList(int page) {
-        return postRepository.findPage(page).stream()
+        return postRepository.getPostWithFilesAndUserList(page).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
     }

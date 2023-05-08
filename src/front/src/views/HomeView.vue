@@ -7,7 +7,7 @@ axios.get("/api/posts").then((response) => {
     response.data.forEach((r) => {
         posts.value.push(r)
     });
-});
+}).catch((error)=>alert(error));
 </script>
 <template>
     <main>

@@ -1,5 +1,0 @@
-###테스트 요청
-
-GET http://localhost:8085/test
-Authorization: 17f6e516-8061-47a5-82a2-2e2cee788402
-

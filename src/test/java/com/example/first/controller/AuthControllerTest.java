@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.CookieResultMatchers;
@@ -44,6 +45,8 @@ class AuthControllerTest {
     @Autowired
     private MybatisSessionRepository sessionRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
         // 각 테스트(메서드)가 진행 될 때 마다 실행되는 method
@@ -60,13 +63,13 @@ class AuthControllerTest {
         //given
         User user =User.builder()
                 .name("kook")
-                .email("jjinbbang@naver.com")
-                .password("1234")
+                .email("kk1@naver.com")
+                .password(passwordEncoder.encode("1234"))
                 .build();
         userRepository.save(user);
 
         Login login = Login.builder()
-                .email("jjinbbang@naver.com")
+                .email("kk1@naver.com")
                 .password("1234")
                 .build();
         String json = objectMapper.writeValueAsString(login);
@@ -86,8 +89,8 @@ class AuthControllerTest {
     void test2() throws Exception {
         User user =User.builder()
                 .name("kook")
-                .email("kk1@naver.com")
-                .password("1234")
+                .email("kk1123@naver.com")
+                .password(passwordEncoder.encode("1234"))
                 .build();
         userRepository.save(user);
 

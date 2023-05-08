@@ -33,9 +33,13 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-    public void post(@RequestBody @Valid PostCreate request) {
+    public void post(@RequestBody @Valid PostCreate request, UserSession userSession) {
         request.validate();
-        postService.write(request);
+        postService.write(PostCreate.builder()
+                        .title(request.getTitle())
+                        .content(request.getContent())
+                        .userId(userSession.getUserId())
+                .build());
     }
 
     @GetMapping("/posts/{id}")
@@ -45,7 +49,7 @@ public class PostController {
 
     @GetMapping("/posts")
     public List<PostResponse> getList(@RequestParam(defaultValue = "1") int page) {
-        return postService.getList(page);
+        return postService.getList(Math.abs(page));
     }
 
     @PatchMapping("/posts/{postId}")

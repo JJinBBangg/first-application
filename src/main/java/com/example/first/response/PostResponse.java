@@ -2,6 +2,7 @@ package com.example.first.response;
 
 
 import com.example.first.entity.Post;
+import jakarta.annotation.Nullable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,9 @@ public class PostResponse {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
+        this.hit = post.getHit();
+        this.dateTime = post.getDateTime();
+        this.name =post.getUser().get(0).getName();
     }
 
     @Builder

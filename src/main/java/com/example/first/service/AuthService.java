@@ -8,6 +8,7 @@ import com.example.first.repository.MybatisUserRepository;
 import com.example.first.request.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,9 +20,16 @@ public class AuthService {
 
     private final MybatisUserRepository userRepository;
     private final MybatisSessionRepository sessionRepository;
+    private final PasswordEncoder passwordEncoder;
     // 로그인 기능
     public UserSession signIn(Login request) {
-        User user = userRepository.findByEmailAndPassword(request).orElseThrow(InvalidSigninInformation::new);;
+        User user = userRepository.findByEmail(User.builder()
+                        .email(request.getEmail())
+                        .build())
+                .orElseThrow(InvalidSigninInformation::new);
+        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
+            throw new InvalidSigninInformation();
+        }
         UserSession userSession = UserSession.builder()
                 .userId(user.getId())
                 .build();

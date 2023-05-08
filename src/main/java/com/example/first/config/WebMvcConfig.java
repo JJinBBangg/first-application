@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -32,5 +33,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //    public void addCorsMappings(CorsRegistry registry) {
 //        registry.addMapping("/**")
 //                .allowedOrigins("http://localhost:5173");
+//    }
+
+//    @Override // 뷰로 던질 주소찾아가는 메소드
+//    public void addViewControllers(ViewControllerRegistry registry) {
+//        WebMvcConfigurer.super.addViewControllers(registry);
 //    }
 }

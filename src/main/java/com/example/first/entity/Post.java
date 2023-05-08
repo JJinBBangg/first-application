@@ -15,15 +15,16 @@ public class Post {
     private Long id;
     private String title;
     private String content;
+    @Nullable
     private Long userId;
     private LocalDateTime dateTime;
     private Long hit;
     @Nullable
     private List<Files> files;
-    private User user;
+    private List<User> user;
 
     @Builder
-    public Post(Long id,String title, String content, Long userId, List<Files> files,LocalDateTime dateTime, Long hit, User user) {
+    public Post(Long id,String title, String content, Long userId, List<Files> files,LocalDateTime dateTime, Long hit, List<User> user) {
         this.id = id;
         this.title= title;
         this.content=content;

@@ -49,7 +49,7 @@ public class AuthController {
                 .build();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
     }
-    @PostMapping("/logout")
+    @PostMapping("/auth/logout")
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         // 클라이언트의 세션을 무효화하여 로그아웃 처리
         HttpSession session = request.getSession(false);
@@ -65,7 +65,6 @@ public class AuthController {
                 response.addCookie(cookie);
             }
         }
-
         return ResponseEntity.ok("로그아웃되었습니다.");
     }
 }

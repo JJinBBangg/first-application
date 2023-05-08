@@ -1,53 +1,38 @@
 <script setup>
-import {onMounted, ref} from "vue";
-
 import axios from "axios";
-import {useRouter} from "vue-router";
+import {ref} from "vue";
+import router from "@/router";
 
-const router = useRouter()
-const post = ref({
-        id: 0,
-        title : "",
-        content :""
-    }
-);
+const email =ref("")
+const password = ref("")
+const userId = ref("")
 
-const props = defineProps({
-    postId:{
-        type : [Number,String],
-        require : true
-    },
-});
-
-onMounted(()=>{
-    axios.get(`/api/posts/${props.postId}`).then((response)=>{
-        post.value = response.data;
-    })
-})
-
-const edit = function (){
-    axios.patch(`/api/posts/${props.postId}`,post.value)
-        .then(()=>{
+const login = function (){
+    axios.post("/api/auth/login",
+        {
+            email: email.value,
+            password : password.value,
+            userId : 233
+        }
+    ).then(()=>{
         router.replace({name : 'home'})
+    }).catch(error =>{
+       alert(error)
     })
 }
 </script>
-
 <template>
-
-
-    <div>
-        <el-input v-model="post.title" placeholder="제목을 입력해주세요" />
-    </div>
-
-    <div class="my-2">
-        <el-input v-model="post.content" type="textarea" rows="15" />
-    </div>
-
-    <div class="my-2">
-        <el-button type="warning" @click="edit()">수정</el-button>
+    <div class="login-container">
+        <h1>Login</h1>
+            <el-input type="email" v-model="email" placeholder="E-mail을 입력해주세요" />
+            <el-input type="password" v-model="password" placeholder="password를 입력해주세요" />
+            <div class="my-2">
+                <el-button type="primary" @click="login()"> 로그인</el-button>
+            </div>
     </div>
 </template>
+
+
 
 <style>
 

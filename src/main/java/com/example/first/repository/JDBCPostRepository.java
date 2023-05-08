@@ -120,7 +120,7 @@ public class JDBCPostRepository implements PostRepository{
     }
 
     @Override
-    public List<Post> findPage(int page) {
+    public List<Post> getPostWithFilesAndUserList(int page) {
         return null;
     }
 

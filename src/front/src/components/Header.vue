@@ -16,7 +16,7 @@ import {RouterLink} from "vue-router";
                 <RouterLink to="/write">글 작성</RouterLink>
             </el-menu-item>
             <div class="flex-grow"/>
-            <el-menu-item index="1"><RouterLink to="/write">로그인</RouterLink></el-menu-item>
+            <el-menu-item index="1"><RouterLink to="/user">로그인</RouterLink></el-menu-item>
             <el-menu-item index="2">검색</el-menu-item>
             <el-sub-menu index="3">
                 <template #title>더보기</template>

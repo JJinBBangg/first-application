@@ -1,9 +1,14 @@
 package com.example.first.controller;
 
 import com.example.first.entity.Post;
+import com.example.first.entity.User;
+import com.example.first.repository.MybatisPostRepository;
+import com.example.first.repository.MybatisUserRepository;
 import com.example.first.repository.PostRepository;
 import com.example.first.request.PostCreate;
 import com.example.first.request.PostEdit;
+import com.example.first.request.UserCreate;
+import com.example.first.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,8 +40,12 @@ class PostControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+
     @Autowired
-    private PostRepository postRepository;
+    private MybatisPostRepository postRepository;
+
+    @Autowired
+    private MybatisUserRepository userRepository;
 
     @BeforeEach
         // 각 테스트(메서드)가 진행 될 때 마다 실행되는 method
@@ -117,18 +126,27 @@ class PostControllerTest {
     @DisplayName("글 1개 조회")
     void test4() throws Exception {
         //iven
+        User user = User.builder()
+                .email("1234@naver.com")
+                .name("kookjin123")
+                .password("1234")
+                .build();
+        userRepository.save(user);
+
         Post post = Post.builder()
                 .title("123456789012345")
                 .content("bar")
-                .userId(112L)
+                .userId(user.getId())
                 .build();
+
         postRepository.save(post);
+
         //expected
         mockMvc.perform(get("/posts/{id}", post.getId())
                         .contentType(APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.id").value(post.getId()))
-                .andExpect(jsonPath("$.title").value("1234567890"))
+                .andExpect(jsonPath("$.title").value("123456789012345"))
                 .andExpect(jsonPath("$.content").value("bar"))
                 .andDo(MockMvcResultHandlers.print());
 
@@ -137,21 +155,18 @@ class PostControllerTest {
     @Test
     @DisplayName("글 여러개 조회")
     void test5() throws Exception {
-        //iven
-//        Post post1 = Post.builder()
-//                .title("123456789012345")
-//                .content("bar1")
-//                .build();
-//        PostRepository.save(post1);
-//        Post post2 = Post.builder()
-//                .title("123456789012345")
-//                .content("bar1")
-//                .build();
-//        PostRepository.save(post2);
+        //given
+        User user = User.builder()
+                .email("1234@naver.com")
+                .name("kookjin123")
+                .password("1234")
+                .build();
+        userRepository.save(user);
         List<Post> requestPosts = IntStream.range(1, 31)
                 .mapToObj(i -> Post.builder()
                         .title("제목" + i)
                         .content("내용" + i)
+                        .userId(user.getId())
                         .build())
                 .collect(Collectors.toList());
 
@@ -182,10 +197,16 @@ class PostControllerTest {
     @DisplayName("글 수정 조회")
     void test6() throws Exception {
         //given
-
+        User user = User.builder()
+                .email("1234@naver.com")
+                .name("kookjin123")
+                .password("1234")
+                .build();
+        userRepository.save(user);
         Post post1 = Post.builder()
                 .title("제목1")
                 .content("내용1")
+                .userId(user.getId())
                 .build();
 
 
@@ -193,6 +214,7 @@ class PostControllerTest {
         Post post2 = Post.builder()
                 .title("제목2")
                 .content("내용2")
+                .userId(user.getId())
                 .build();
 
 

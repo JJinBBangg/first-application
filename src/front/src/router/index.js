@@ -31,10 +31,10 @@ const router = createRouter({
       props : true
     },
     {
-      path : '/user/:userId',
+      path : '/user',
       name : 'user',
-      component: UserView,
-      props : true
+      component: UserView
+
     }
   ]
 })

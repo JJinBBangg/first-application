@@ -14,7 +14,7 @@ public interface MybatisPostRepository extends PostRepository {
 
     @Override
     @Insert("""
-            INSERT INTO Post(title, content, userId)
+            INSERT INTO POST(title, content, userId)
             VALUES(#{title}, #{content}, #{userId} )
             """)
     @Options(useGeneratedKeys = true, keyColumn="id", keyProperty="id")
@@ -33,12 +33,7 @@ public interface MybatisPostRepository extends PostRepository {
     int deleteAll();
 
     @Override
-    @Select("""
-            SELECT * FROM POST
-            ORDER BY 1 DESC
-            OFFSET ${(page - 1) * 10} ROWS FETCH NEXT 10 ROWS ONLY
-            """)
-    List<Post> findPage(int page);
+    List<Post> getPostWithFilesAndUserList(int page);
     @Override
     @Select("""
             SELECT * FROM POST
@@ -53,10 +48,11 @@ public interface MybatisPostRepository extends PostRepository {
     @Override
     @Insert("""
             <script>
-            INSERT INTO POST(title, content) 
-                <foreach collection="list" item="post" separator="UNION ALL">
-                    SELECT #{post.title}, #{post.content} FROM DUAL 
-                </foreach>
+            INSERT INTO POST(title, content, userId)
+            VALUES  
+            <foreach collection="list" item="post" separator=",">
+                (#{post.title}, #{post.content}, #{post.userId})
+            </foreach>
             </script>
             """)
     int saveAll(List<Post> list);
@@ -78,7 +74,7 @@ public interface MybatisPostRepository extends PostRepository {
 
     @Insert("""
             INSERT INTO FILES(postId, fileName) 
-                SELECT #{postId}, #{fileName} FROM DUAL
+            VALUES( #{postId}, #{fileName})
             """)
     void saveFile(Files file);
 

@@ -9,7 +9,7 @@ import java.util.Optional;
 @Mapper
 public interface MybatisSessionRepository {
     @Insert("""
-            INSERT INTO usersession(accessToken, userId)
+            INSERT INTO USERSESSION(accessToken, userId)
             VALUES( #{accessToken} , #{userId} )
             """)
     @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")

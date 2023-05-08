@@ -12,8 +12,10 @@ public interface MybatisUserRepository {
 
     @Select("""
             SELECT * FROM MEMBER 
+            ORDER BY 1 DESC
+            LIMIT 30 OFFSET ${(page > 0) ? (page-1) * 30 : 0}
             """)
-    List<User> findAll();
+    List<User> findAll(int page);
 
     @Select("""
             SELECT * FROM MEMBER
@@ -33,7 +35,7 @@ public interface MybatisUserRepository {
             INSERT INTO MEMBER(name, email, password)
             VALUES(#{name}, #{email}, #{password})
             """)
-    @Options(useGeneratedKeys = true, keyColumn="id", keyProperty="id")
+    @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
     int save(User user);
 
     @Delete("""
@@ -46,4 +48,16 @@ public interface MybatisUserRepository {
             WHERE email = #{email}
             """)
     Optional<User> findByEmail(User user);
+
+    @Insert("""
+                <script>
+                    INSERT INTO MEMBER(email, name, password)
+                    VALUES
+                    <foreach collection="list" item="user" separator=",">
+                        (#{user.email}, #{user.name}, #{user.password})
+                    </foreach>
+                </script>
+            """)
+    int saveAll(List<User> list);
+
 }

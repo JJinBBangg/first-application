@@ -15,7 +15,7 @@ public interface PostRepository {
 
     int deleteAll();
 
-    List<Post> findPage(int page);
+    List<Post> getPostWithFilesAndUserList(int page);
 
     List<Post> findAll();
 

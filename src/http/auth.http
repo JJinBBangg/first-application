@@ -1,14 +1,26 @@
+### 회원가입
+POST http://localhost:8085/user
+Content-Type: application/json
+
+{
+  "name" : "kookjin",
+  "email" : "k@naver.com",
+  "password" : "1234"
+}
 ### 로그인 검증 요청
 
 POST http://localhost:8085/auth/login
 Content-Type: application/json
 
 {
-  "email" : "kk1@naver.com",
+  "email" : "k@naver.com",
   "password" : "1234"
 }
 ### 로그인 검증 요청
 
 GET http://localhost:8085/test
 Content-Type: application/json
-Cookie: SESSION=22774612-a73d-48f0-bd75-dfdd60c0e457
+Cookie: SESSION=1c1e1e2c-7fb2-419e-941d-1ca085a0ec44
+
+###
+GET http://localhost:8085/posts?page=1

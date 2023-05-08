@@ -1,41 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.first.repository.MybatisPostRepository">
-    <resultMap id="postWithFilesAndUser" type="Post">
-        <id     column="p_id"                       property="id"/>
-        <result column="p_title"                     property="title"/>
-        <result column="p_content"                    property="content"/>
-        <result column="p_userId"                 property="userId"/>
-        <result column="p_datetime"                 property="dateTime"/>
-        <result column="p_hit"                 property="hit"/>
+
+    <resultMap id="postResultMap" type="Post">
+        <id property="id"           column="id"/>
+        <result property="title"    column="title"/>
+        <result property="content"  column="content"/>
+        <result property="userId"   column="userid"/>
+        <result property="dateTime" column="datetime"/>
+        <result property="hit"      column="hit"/>
         <collection property="files" ofType="Files">
-            <id     column="f_id"                   property="id"/>
-            <result column="f_fileName"             property="fileName"/>
-            <result column="f_postId"               property="userId"/>
+            <id property="id"           column="files_id"/>
+            <result property="fileName" column="filename"/>
         </collection>
-        <collection property="user" ofType="User">
-            <result column="m_mame"             property="name"/>
+        <collection property="user"     ofType="User">
+            <result property="name"     column="name"/>
+            <result property="email"    column="email"/>
+        </collection>
+    </resultMap>
+    <select id="getPostWithFilesAndUser" resultMap="postResultMap">
+        SELECT p.id,
+               p.title,
+               p.content,
+               p.userid,
+               p.datetime,
+               p.hit,
+               f.id as files_id,
+               f.filename,
+               u.name,
+               u.email
+        FROM POST p
+                 LEFT JOIN FILES f ON p.id = f.postid
+                 LEFT JOIN MEMBER u ON p.userid = u.id
+        WHERE p.id = #{id}
+    </select>
+    <resultMap id="postWithFilesAndUserList" type="Post">
+        <id property="id"           column="id"/>
+        <result property="title"    column="title"/>
+        <result property="content"  column="content"/>
+        <result property="userId"   column="userid"/>
+        <result property="dateTime" column="datetime"/>
+        <result property="hit"      column="hit"/>
+        <collection property="files" ofType="Files">
+            <id property="id"           column="files_id"/>
+            <result property="fileName" column="filename"/>
+        </collection>
+        <collection property="user"     ofType="User">
+            <result property="name"     column="name"/>
+            <result property="email"    column="email"/>
         </collection>
     </resultMap>
 
-    <select id="getPostWithFilesAndUser" resultMap="postWithFilesAndUser">
-        SELECT
-            p.id AS p_id,
-            p.title AS p_title,
-            p.content AS p_content,
-            p.userId AS p_userId,
-            p.datetime AS p_datetime,
-            p.hit AS p_hit,
-            f.id AS f_id,
-            f.fileName AS f_fileName,
-            f.postId AS f_postId,
-            m.name AS m_name
-        FROM
-            post p
-                LEFT JOIN files f ON p.id = f.postid
-                LEFT JOIN Member m ON p.userId = m.id
-        WHERE
-            p.id = #{postId}
+    <select id="getPostWithFilesAndUserList" resultMap="postWithFilesAndUserList">
+    SELECT p.id,
+    p.title,
+    p.content,
+    p.userid,
+    p.datetime,
+    p.hit,
+    f.id as files_id,
+    f.filename,
+    u.name,
+    u.email
+    FROM POST p
+    LEFT JOIN FILES f ON p.id = f.postid
+    LEFT JOIN MEMBER u ON p.userid = u.id
+    ORDER BY p.id DESC
+    LIMIT 10 OFFSET ${(page > 0) ? (page-1) * 10 : 0}
     </select>
-
 </mapper>

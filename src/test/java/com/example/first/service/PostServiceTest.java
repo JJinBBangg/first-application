@@ -1,7 +1,10 @@
 package com.example.first.service;
 
 import com.example.first.entity.Post;
+import com.example.first.entity.User;
 import com.example.first.exception.PostNotFound;
+import com.example.first.repository.MybatisPostRepository;
+import com.example.first.repository.MybatisUserRepository;
 import com.example.first.repository.PostRepository;
 import com.example.first.request.PostCreate;
 import com.example.first.request.PostEdit;
@@ -29,7 +32,9 @@ class PostServiceTest {
     private PostService postService;
 
     @Autowired
-    private PostRepository postRepository;
+    private MybatisPostRepository postRepository;
+    @Autowired
+    private MybatisUserRepository userRepository;
 
     @BeforeEach
         // 각 테스트(메서드)가 진행 될 때 마다 실행되는 method
@@ -59,10 +64,19 @@ class PostServiceTest {
     @Test
     @DisplayName("글 한개 조회")
     void test2() throws Exception {
+        User user = User.builder()
+                .email("123334@naver.com")
+                .name("kookjin123")
+                .password("1234")
+                .build();
+        userRepository.save(user);
+
         //given
         Post requestPost = Post.builder()
                 .title("123456789012345")
-                .content("bar").build();
+                .content("bar")
+                .userId(user.getId())
+                .build();
         postRepository.save(requestPost);
         // 클라이언트 요구사항
         //json 응답 title 값을 10글자 이내로
@@ -76,7 +90,7 @@ class PostServiceTest {
         Assertions.assertNotNull(response);
         Assertions.assertEquals(1, postRepository.count());
         Assertions.assertEquals(requestPost.getId(), response.getId());
-        Assertions.assertEquals("1234567890", response.getTitle());
+        Assertions.assertEquals("123456789012345", response.getTitle());
         Assertions.assertEquals("bar", response.getContent());
     }
 

@@ -26,9 +26,9 @@
             s.accesstoken AS s_accessToken,
             s.userid AS s_userid
         FROM
-            member m
+            MEMBER m
                 LEFT JOIN
-            usersession s ON m.id = s.userid
+            USERSESSION s ON m.id = s.userid
         WHERE
             m.id = #{userId}
     </select>
