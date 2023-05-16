@@ -1,8 +1,14 @@
 package com.example.first.config;
 
 import com.example.first.repository.MybatisSessionRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.MethodParameter;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -12,8 +18,11 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class WebMvcConfig implements WebMvcConfigurer {
     private final MybatisSessionRepository sessionRepository;
+    private final AppConfig appConfig;
+
 //    @Override
 //    public void addInterceptors(InterceptorRegistry registry) {
 //        registry.addInterceptor(new Authintercetor())
@@ -22,13 +31,20 @@ public class WebMvcConfig implements WebMvcConfigurer {
 ////                .addPathPatterns() // 페턴 추가 등록
 //    }
 
+    // 요청 경로 가져오는 메서드
+    private String getRequestPath() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        return request.getRequestURI();
+    }
 
     // 아규먼트 리졸버를 이용하여 로그인 검증
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new AuthResolver(sessionRepository));
+        resolvers.add(new AuthResolver(sessionRepository, appConfig));
     }
+
+}
 //    @Override
 //    public void addCorsMappings(CorsRegistry registry) {
 //        registry.addMapping("/**")
@@ -39,4 +55,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //    public void addViewControllers(ViewControllerRegistry registry) {
 //        WebMvcConfigurer.super.addViewControllers(registry);
 //    }
-}
+

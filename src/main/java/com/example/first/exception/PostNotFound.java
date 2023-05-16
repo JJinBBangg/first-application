@@ -8,9 +8,9 @@ public class PostNotFound extends JJinBBangException {
         super(MESSAGE);
     }
 
-    //    public PostNotFound(Throwable cause) {
-//        super(MESSAGE, cause);
-//    }
+    public PostNotFound(String message) {
+        super(message);
+    }
     @Override
     public int getStatusCode() {
         return 404;

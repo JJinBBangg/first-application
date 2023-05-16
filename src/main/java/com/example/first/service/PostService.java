@@ -5,13 +5,16 @@ import com.example.first.entity.Files;
 import com.example.first.entity.Post;
 import com.example.first.entity.PostEditor;
 import com.example.first.exception.PostNotFound;
+import com.example.first.exception.Unauthorized;
 import com.example.first.repository.MybatisPostRepository;
 import com.example.first.request.PostCreate;
+import com.example.first.request.PostDelete;
 import com.example.first.request.PostEdit;
 import com.example.first.response.PostResponse;
 import jakarta.servlet.annotation.MultipartConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +25,8 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,7 +35,6 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = Exception.class)
 @MultipartConfig(maxFileSize =2*1024*1024 ,maxRequestSize = 2*1024*1024*5)
 public class PostService {
-
     private final MybatisPostRepository postRepository;
 
     private final S3Client s3;
@@ -69,23 +73,31 @@ public class PostService {
     }
 
     public PostResponse get(Long id) {
-        postRepository.hitPlus(id);
+
+        if(postRepository.hitPlus(id) == 0){ throw new PostNotFound(); }
+
         Post post1 = postRepository.getPostWithFilesAndUser(id).orElseThrow(PostNotFound::new);
-        log.info(">>>>{}", post1);
         return PostResponse.builder()
                 .id(post1.getId())
                 .title(post1.getTitle())
                 .content(post1.getContent())
                 .dateTime(post1.getDateTime())
                 .name(post1.getUser().get(0).getName())
+                .userId(post1.getUser().get(0).getId())
                 .hit(post1.getHit())
                 .build();
     }
 
-    public List<PostResponse> getList(int page) {
-        return postRepository.getPostWithFilesAndUserList(page).stream()
+    public Map<String, Object> getList(int page, String search, String type) {
+        List<Post> posts = Optional.of(postRepository.getPostWithFilesAndUserList(page, search, type)).orElseThrow(()->new PostNotFound("게시글이 없습니다."));
+        if(posts.isEmpty()){
+            throw new PostNotFound("게시글이 없습니다.");
+        }
+        int count = postRepository.getPostWithFilesAndUserListCount(search, type).size();
+        List<PostResponse> postList = posts.stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
+        return Map.of("count", count, "list", postList);
     }
 
     public void edit(Long id, PostEdit postEdit) {
@@ -100,9 +112,13 @@ public class PostService {
         postRepository.edit(post);
     }
 
-    public void delete(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(PostNotFound::new);
-        postRepository.delete(id);
+    public void delete(PostDelete postDelete) {
+        Post post = postRepository.getPostWithFilesAndUser(postDelete.getPostId()).orElseThrow(PostNotFound::new);
+
+        if(!post.getUser().get(0).getId().equals(postDelete.getUserId())){
+            throw new Unauthorized("본인의 게시물만 삭제할 수 있습니다.");
+        }
+        postRepository.delete(postDelete.getPostId());
 
     }
 }

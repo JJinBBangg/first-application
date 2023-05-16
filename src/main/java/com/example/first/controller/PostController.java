@@ -3,6 +3,7 @@ package com.example.first.controller;
 
 import com.example.first.entity.UserSession;
 import com.example.first.request.PostCreate;
+import com.example.first.request.PostDelete;
 import com.example.first.request.PostEdit;
 import com.example.first.response.PostResponse;
 import com.example.first.service.PostService;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -20,17 +22,6 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-
-    @GetMapping("/test")
-    public Long test(UserSession userSession) {
-        log.info(">>{}", userSession.getId());
-        return userSession.getUserId();
-    }
-
-    @GetMapping("/bar")
-    public String bar(UserSession userSession) {
-        return "인증이 필요할 페이지";
-    }
 
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request, UserSession userSession) {
@@ -48,18 +39,24 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<PostResponse> getList(@RequestParam(defaultValue = "1") int page) {
-        return postService.getList(Math.abs(page));
+    public Map<String, Object> getList(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "") String search, @RequestParam(defaultValue = "all")String type) {
+        return postService.getList(Math.abs(page), search, type);
     }
 
     @PatchMapping("/posts/{postId}")
-    public void edit(@RequestBody @Valid PostEdit postEdit, @PathVariable Long postId) {
+    public void edit(@RequestBody @Valid PostEdit postEdit, @PathVariable Long postId, UserSession userSession) {
+
         postService.edit(postId, postEdit);
+
     }
 
     @DeleteMapping("/posts/{postId}")
-    public void delete(@PathVariable Long postId) {
-        postService.delete(postId);
+    public void delete(@PathVariable Long postId, UserSession userSession) {
+
+        postService.delete(PostDelete.builder()
+                .postId(postId)
+                .userId(userSession.getUserId())
+                .build());
     }
 }
 

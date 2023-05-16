@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.first.repository.MybatisPostRepository">
-
     <resultMap id="postResultMap" type="Post">
         <id property="id"           column="id"/>
         <result property="title"    column="title"/>
@@ -14,6 +13,7 @@
             <result property="fileName" column="filename"/>
         </collection>
         <collection property="user"     ofType="User">
+            <id property="id"           column="user_id"/>
             <result property="name"     column="name"/>
             <result property="email"    column="email"/>
         </collection>
@@ -27,6 +27,7 @@
                p.hit,
                f.id as files_id,
                f.filename,
+               u.id as user_id,
                u.name,
                u.email
         FROM POST p
@@ -50,8 +51,8 @@
             <result property="email"    column="email"/>
         </collection>
     </resultMap>
-
     <select id="getPostWithFilesAndUserList" resultMap="postWithFilesAndUserList">
+    <bind name="pattern" value="'%' + search + '%'" />
     SELECT p.id,
     p.title,
     p.content,
@@ -65,7 +66,62 @@
     FROM POST p
     LEFT JOIN FILES f ON p.id = f.postid
     LEFT JOIN MEMBER u ON p.userid = u.id
+     <where>
+            <if test="(type eq 'all') or (type eq 'title')">
+                title  LIKE #{pattern}
+            </if>
+            <if test="(type eq 'all') or (type eq 'content')">
+                OR content   LIKE #{pattern}
+            </if>
+            <if test="(type eq 'all') or (type eq 'writer')">
+                OR name LIKE #{pattern}
+            </if>
+        </where>
     ORDER BY p.id DESC
     LIMIT 10 OFFSET ${(page > 0) ? (page-1) * 10 : 0}
+    </select>
+
+    <resultMap id="postWithFilesAndUserListCount" type="Post">
+        <id property="id"           column="id"/>
+        <result property="title"    column="title"/>
+        <result property="content"  column="content"/>
+        <result property="userId"   column="userid"/>
+        <result property="dateTime" column="datetime"/>
+        <result property="hit"      column="hit"/>
+        <collection property="files" ofType="Files">
+            <id property="id"           column="files_id"/>
+            <result property="fileName" column="filename"/>
+        </collection>
+        <collection property="user"     ofType="User">
+            <result property="name"     column="name"/>
+            <result property="email"    column="email"/>
+        </collection>
+    </resultMap>
+    <select id="getPostWithFilesAndUserListCount" resultMap="postWithFilesAndUserListCount">
+        <bind name="pattern" value="'%' + search + '%'" />
+        SELECT p.id,
+        p.title,
+        p.content,
+        p.userid,
+        p.datetime,
+        p.hit,
+        f.id as files_id,
+        f.filename,
+        u.name,
+        u.email
+        FROM POST p
+        LEFT JOIN FILES f ON p.id = f.postid
+        LEFT JOIN MEMBER u ON p.userid = u.id
+        <where>
+            <if test="(type eq 'all') or (type eq 'title')">
+                title  LIKE #{pattern}
+            </if>
+            <if test="(type eq 'all') or (type eq 'content')">
+                OR content   LIKE #{pattern}
+            </if>
+            <if test="(type eq 'all') or (type eq 'writer')">
+                OR name LIKE #{pattern}
+            </if>
+        </where>
     </select>
 </mapper>

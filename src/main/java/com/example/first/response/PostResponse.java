@@ -21,6 +21,7 @@ public class PostResponse {
     private String name;
     private String title;
     private String content;
+    private Long userId;
     private LocalDateTime dateTime;
     private Long hit;
 
@@ -31,14 +32,16 @@ public class PostResponse {
         this.hit = post.getHit();
         this.dateTime = post.getDateTime();
         this.name =post.getUser().get(0).getName();
+        this.userId = post.getUser().get(0).getId();
     }
 
     @Builder
-    public PostResponse(Long id, String title, String content, LocalDateTime dateTime, String name, long hit) {
+    public PostResponse(Long id, String title, String content, LocalDateTime dateTime, String name, long hit, Long userId) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.dateTime = dateTime;
+        this.userId = userId;
         this.name = name;
         this.hit = hit;
     }

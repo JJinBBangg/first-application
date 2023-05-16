@@ -18,5 +18,6 @@ public class UserSession {
     public UserSession(Long userId){
         this.accessToken = UUID.randomUUID().toString();
         this.userId = userId;
+;
     }
 }

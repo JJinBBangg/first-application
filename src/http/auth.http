@@ -22,5 +22,7 @@ GET http://localhost:8085/test
 Content-Type: application/json
 Cookie: SESSION=1c1e1e2c-7fb2-419e-941d-1ca085a0ec44
 
-###
-GET http://localhost:8085/posts?page=1
+### 테스트 검증 요청
+GET http://localhost:8085/test
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzYiLCJpYXQiOjE2ODM2MjM4MTQsImV4cCI6MTY4MzYyNDQxNH0.igQFUDco8VQV7WCLYoAcnYi_4eKNBJrM3usDYgMrprs

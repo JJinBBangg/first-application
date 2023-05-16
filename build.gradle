@@ -51,6 +51,12 @@ dependencies {
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
 	implementation 'org.springframework.security:org.springframework.security'
 	implementation 'org.springframework.boot:spring-boot-starter-security:3.0.5'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	implementation 'commons-codec:commons-codec:1.15'
+	implementation 'org.springframework:spring-context-support'
+	implementation 'jakarta.mail:jakarta.mail-api'
+
+
 
 
 

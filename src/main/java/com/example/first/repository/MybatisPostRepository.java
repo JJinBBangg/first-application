@@ -9,10 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Mapper
-public interface MybatisPostRepository extends PostRepository {
+public interface MybatisPostRepository {
 
 
-    @Override
     @Insert("""
             INSERT INTO POST(title, content, userId)
             VALUES(#{title}, #{content}, #{userId} )
@@ -20,21 +19,21 @@ public interface MybatisPostRepository extends PostRepository {
     @Options(useGeneratedKeys = true, keyColumn="id", keyProperty="id")
     int save(Post post);
 
-    @Override
     @Select("""
             SELECT COUNT(ID) count FROM POST
             """)
     int count();
 
-    @Override
     @Delete("""
             DELETE FROM POST
             """)
     int deleteAll();
 
-    @Override
-    List<Post> getPostWithFilesAndUserList(int page);
-    @Override
+
+    List<Post> getPostWithFilesAndUserList(@Param("page") int page,@Param("search") String search,@Param("type") String type);
+
+    List<Post> getPostWithFilesAndUserListCount(@Param("search") String search,@Param("type") String type);
+    Optional<Post> getPostWithFilesAndUser(Long postId);
     @Select("""
             SELECT * FROM POST
             """)
@@ -45,7 +44,6 @@ public interface MybatisPostRepository extends PostRepository {
             """)
     Optional<Post> findById(Long id);
 
-    @Override
     @Insert("""
             <script>
             INSERT INTO POST(title, content, userId)
@@ -57,7 +55,6 @@ public interface MybatisPostRepository extends PostRepository {
             """)
     int saveAll(List<Post> list);
 
-    @Override
     @Update("""
             UPDATE POST SET
                 title = #{title},
@@ -66,7 +63,6 @@ public interface MybatisPostRepository extends PostRepository {
             """)
     int edit(Post post);
 
-    @Override
     @Delete("""
             DELETE FROM POST WHERE id = #{id}
             """)
@@ -83,10 +79,10 @@ public interface MybatisPostRepository extends PostRepository {
             SET hit = hit + 1
             WHERE id = #{id}
             """)
-    void hitPlus(Long id);
+    int hitPlus(Long id);
 
 
-    Optional<Post> getPostWithFilesAndUser(Long postId);
+
 }
 
 

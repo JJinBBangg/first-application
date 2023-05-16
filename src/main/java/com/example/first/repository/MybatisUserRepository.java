@@ -47,7 +47,7 @@ public interface MybatisUserRepository {
             SELECT * FROM MEMBER
             WHERE email = #{email}
             """)
-    Optional<User> findByEmail(User user);
+    Optional<User> findByEmail(String email);
 
     @Insert("""
                 <script>
@@ -60,4 +60,9 @@ public interface MybatisUserRepository {
             """)
     int saveAll(List<User> list);
 
+    @Select("""
+            SELECT * FROM MEMBER
+            WHERE name = #{name}
+            """)
+    Optional<User> findByMame(String name);
 }

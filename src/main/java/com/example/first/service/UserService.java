@@ -25,7 +25,7 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     public User add(UserCreate userCreate) {
-        if (!mybatisUserRepository.findByEmail(User.builder().email(userCreate.getEmail()).build()).isEmpty()) {
+        if (!mybatisUserRepository.findByEmail(userCreate.getEmail()).isEmpty()) {
             throw new DuplicateEmail();
         }
         User user = User.builder()
@@ -43,7 +43,6 @@ public class UserService {
 
     public UserResponse get(Long id) {
         User user = mybatisUserRepository.findById(id).orElseThrow(UserNotFound::new);
-        log.info(">>>>{}",user);
         return UserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())

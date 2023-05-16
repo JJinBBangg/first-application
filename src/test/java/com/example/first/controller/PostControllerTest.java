@@ -3,13 +3,14 @@ package com.example.first.controller;
 import com.example.first.entity.Post;
 import com.example.first.entity.User;
 import com.example.first.repository.MybatisPostRepository;
+import com.example.first.repository.MybatisSessionRepository;
 import com.example.first.repository.MybatisUserRepository;
-import com.example.first.repository.PostRepository;
+import com.example.first.request.Login;
 import com.example.first.request.PostCreate;
 import com.example.first.request.PostEdit;
-import com.example.first.request.UserCreate;
-import com.example.first.service.UserService;
+import com.example.first.response.PostResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,11 +18,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -40,34 +44,64 @@ class PostControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-
     @Autowired
     private MybatisPostRepository postRepository;
 
     @Autowired
     private MybatisUserRepository userRepository;
 
+    @Autowired
+    private MybatisSessionRepository sessionRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @BeforeEach
         // 각 테스트(메서드)가 진행 될 때 마다 실행되는 method
     void clean() {
+        sessionRepository.deleteAll();
         postRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
     @DisplayName("/posts 요청 Post를 DB에 저장한다.")
     void test1() throws Exception {
+        User user =User.builder()
+                .name("kook123")
+                .email("kk1@naver.com")
+                .password(passwordEncoder.encode("1234"))
+                .build();
+        userRepository.save(user);
+
+        Login login = Login.builder()
+                .email("kk1@naver.com")
+                .password("1234")
+                .build();
+        String json = objectMapper.writeValueAsString(login);
+
+        MvcResult result = mockMvc.perform(post("/auth/login")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.accessToken").isNotEmpty())
+                .andReturn();
+
+        String accessToken = JsonPath.read(result.getResponse().getContentAsString(), "$.accessToken");
 
         //given
         PostCreate request = PostCreate.builder()
                 .title("제목입니다.")
                 .content("내용입니다.")
                 .build();
-        String json = objectMapper.writeValueAsString(request);
+        String json1 = objectMapper.writeValueAsString(request);
 
         //excepted
         mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
-                        .content(json)
+                        .header("Authorization", accessToken)
+                        .content(json1)
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(""))
@@ -100,17 +134,40 @@ class PostControllerTest {
     @Test
     @DisplayName("/posts 요청 시 DB에 Post 래코드 추가.")
     void test3() throws Exception {
+        User user =User.builder()
+                .name("kook123")
+                .email("kk1@naver.com")
+                .password(passwordEncoder.encode("1234"))
+                .build();
+        userRepository.save(user);
+
+        Login login = Login.builder()
+                .email("kk1@naver.com")
+                .password("1234")
+                .build();
+        String json = objectMapper.writeValueAsString(login);
+
+        MvcResult result = mockMvc.perform(post("/auth/login")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.accessToken").isNotEmpty())
+                .andReturn();
+
+        String accessToken = JsonPath.read(result.getResponse().getContentAsString(), "$.accessToken");
         //given
         PostCreate request = PostCreate.builder()
                 .title("제목입니다.")
                 .content("내용입니다.")
                 .build();
-        String json = objectMapper.writeValueAsString(request);
+        String json1 = objectMapper.writeValueAsString(request);
 
         //when
         mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
-                        .content(json)
+                        .header("Authorization", accessToken)
+                        .content(json1)
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
@@ -159,10 +216,10 @@ class PostControllerTest {
         User user = User.builder()
                 .email("1234@naver.com")
                 .name("kookjin123")
-                .password("1234")
+                .password(passwordEncoder.encode("1234"))
                 .build();
         userRepository.save(user);
-        List<Post> requestPosts = IntStream.range(1, 31)
+        List<Post> requestPosts = IntStream.range(1, 101)
                 .mapToObj(i -> Post.builder()
                         .title("제목" + i)
                         .content("내용" + i)
@@ -172,6 +229,7 @@ class PostControllerTest {
 
         postRepository.saveAll(requestPosts);
         //expected
+
         mockMvc.perform(get("/posts?page=0")
                         .contentType(APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -184,11 +242,11 @@ class PostControllerTest {
                  * [{id:..., title:...}, {id:..., title:...}]
                  */
 
-                .andExpect(jsonPath("$.length()", Matchers.is(10)))
-                .andExpect(jsonPath("$[0].title").value("제목30"))
-                .andExpect(jsonPath("$[0].content").value("내용30"))
-                .andExpect(jsonPath("$[1].title").value("제목29"))
-                .andExpect(jsonPath("$[1].content").value("내용29"))
+                .andExpect(jsonPath("$.list.length()", Matchers.is(10)))
+                .andExpect(jsonPath("$.list[0].title").value("제목100"))
+                .andExpect(jsonPath("$.list[0].content").value("내용100"))
+                .andExpect(jsonPath("$.list[1].title").value("제목99"))
+                .andExpect(jsonPath("$.list[1].content").value("내용99"))
                 .andDo(MockMvcResultHandlers.print());
 
     }
@@ -196,6 +254,28 @@ class PostControllerTest {
     @Test
     @DisplayName("글 수정 조회")
     void test6() throws Exception {
+        User user1 =User.builder()
+                .name("kook123")
+                .email("kk1@naver.com")
+                .password(passwordEncoder.encode("1234"))
+                .build();
+        userRepository.save(user1);
+
+        Login login = Login.builder()
+                .email("kk1@naver.com")
+                .password("1234")
+                .build();
+        String json = objectMapper.writeValueAsString(login);
+
+        MvcResult result = mockMvc.perform(post("/auth/login")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.accessToken").isNotEmpty())
+                .andReturn();
+
+        String accessToken = JsonPath.read(result.getResponse().getContentAsString(), "$.accessToken");
         //given
         User user = User.builder()
                 .email("1234@naver.com")
@@ -226,32 +306,56 @@ class PostControllerTest {
                 .build();
         //when
         //expected
-
+        String edit= objectMapper.writeValueAsString(postEdit);
         mockMvc.perform(patch("/posts/{postId}", post2.getId())
                         .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(postEdit)))
+                        .header("Authorization", accessToken)
+                        .content(edit))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        mockMvc.perform(get("/posts", post2.getId())
+        mockMvc.perform(get("/posts?page=1&search=&type=all")
                 .contentType(APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$[0].id").value(post2.getId()))
-                .andExpect(jsonPath("$[0].title").value("제목3"))
-                .andExpect(jsonPath("$[0].content").value("내용3"))
-                .andExpect(jsonPath("$[1].id").value(post1.getId()))
-                .andExpect(jsonPath("$[1].title").value("제목1"))
-                .andExpect(jsonPath("$[1].content").value("내용1"))
+                .andExpect(jsonPath("$.list[0].id").value(post2.getId()))
+                .andExpect(jsonPath("$.list[0].title").value("제목3"))
+                .andExpect(jsonPath("$.list[0].content").value("내용3"))
+                .andExpect(jsonPath("$.list[1].id").value(post1.getId()))
+                .andExpect(jsonPath("$.list[1].title").value("제목1"))
+                .andExpect(jsonPath("$.list[1].content").value("내용1"))
                 .andDo(MockMvcResultHandlers.print());
     }
     @Test
     @DisplayName("글 삭제")
     void test7() throws Exception {
+        User user1 =User.builder()
+                .name("kook123")
+                .email("kk1@naver.com")
+                .password(passwordEncoder.encode("1234"))
+                .build();
+        userRepository.save(user1);
+
+        Login login = Login.builder()
+                .email("kk1@naver.com")
+                .password("1234")
+                .build();
+        String json = objectMapper.writeValueAsString(login);
+
+        MvcResult result = mockMvc.perform(post("/auth/login")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.accessToken").isNotEmpty())
+                .andReturn();
+
+        String accessToken = JsonPath.read(result.getResponse().getContentAsString(), "$.accessToken");
         //given
 
         Post post = Post.builder()
                 .title("제목")
                 .content("내용")
+                .userId(user1.getId())
                 .build();
 
 
@@ -261,8 +365,61 @@ class PostControllerTest {
         //expected
 
         mockMvc.perform(delete("/posts/{postId}", post.getId())
-                        .contentType(APPLICATION_JSON))
+                        .contentType(APPLICATION_JSON)
+                        .header("Authorization", accessToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+    @Test
+    @DisplayName("다른 사람의 글 삭제 시 오류")
+    void test8() throws Exception {
+        //user1으로 로그인 후 user2가 작성한 글을 user1이 삭제하려고하는 경우 오류
+        User user1 =User.builder()
+                .name("kook123")
+                .email("kk1@naver.com")
+                .password(passwordEncoder.encode("1234"))
+                .build();
+        userRepository.save(user1);
+
+        Login login = Login.builder()
+                .email("kk1@naver.com")
+                .password("1234")
+                .build();
+        String json = objectMapper.writeValueAsString(login);
+
+        MvcResult result = mockMvc.perform(post("/auth/login")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.accessToken").isNotEmpty())
+                .andReturn();
+
+        String accessToken = JsonPath.read(result.getResponse().getContentAsString(), "$.accessToken");
+        //given
+        User user2 =User.builder()
+                .name("kook1123")
+                .email("kk1123@naver.com")
+                .password(passwordEncoder.encode("1234"))
+                .build();
+        userRepository.save(user2);
+
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .userId(user2.getId())
+                .build();
+
+
+        postRepository.save(post);
+
+        //when
+        //expected
+
+        mockMvc.perform(delete("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON)
+                        .header("Authorization", accessToken))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized())
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -277,6 +434,29 @@ class PostControllerTest {
     @Test
     @DisplayName("존재하지 않는 게시글 수정")
     void test10() throws Exception{
+        User user =User.builder()
+                .name("kook123")
+                .email("kk1@naver.com")
+                .password(passwordEncoder.encode("1234"))
+                .build();
+        userRepository.save(user);
+
+        Login login = Login.builder()
+                .email("kk1@naver.com")
+                .password("1234")
+                .build();
+        String json = objectMapper.writeValueAsString(login);
+
+        MvcResult result = mockMvc.perform(post("/auth/login")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.accessToken").isNotEmpty())
+                .andReturn();
+
+        String accessToken = JsonPath.read(result.getResponse().getContentAsString(), "$.accessToken");
+
         PostEdit postEdit = PostEdit.builder()
                 .title("제목1")
                 .content("내용1")
@@ -286,6 +466,7 @@ class PostControllerTest {
 
         mockMvc.perform(patch("/posts/{postId}", 1L)
                         .contentType(APPLICATION_JSON)
+                        .header("Authorization", accessToken)
                         .content(objectMapper.writeValueAsString(postEdit)))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andDo(MockMvcResultHandlers.print());
@@ -293,17 +474,41 @@ class PostControllerTest {
     @Test
     @DisplayName("게시글 작성시 제목에 '바보'는 포함될 수 없다.")
     void test11() throws Exception {
+        User user =User.builder()
+                .name("kook123")
+                .email("kk1@naver.com")
+                .password(passwordEncoder.encode("1234"))
+                .build();
+        userRepository.save(user);
+
+        Login login = Login.builder()
+                .email("kk1@naver.com")
+                .password("1234")
+                .build();
+        String json = objectMapper.writeValueAsString(login);
+
+        MvcResult result = mockMvc.perform(post("/auth/login")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.accessToken").isNotEmpty())
+                .andReturn();
+
+        String accessToken = JsonPath.read(result.getResponse().getContentAsString(), "$.accessToken");
+
         //given
         PostCreate request = PostCreate.builder()
                 .title("나는 바보입니다.")
                 .content("내용입니다.")
                 .build();
-        String json = objectMapper.writeValueAsString(request);
+        String json1 = objectMapper.writeValueAsString(request);
 
         //when
         mockMvc.perform(post("/posts")
+                        .header("Authorization", accessToken)
                         .contentType(APPLICATION_JSON)
-                        .content(json))
+                        .content(json1))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
 

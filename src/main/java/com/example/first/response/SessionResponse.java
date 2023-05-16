@@ -1,12 +1,18 @@
 package com.example.first.response;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class SessionResponse {
-    private final String accessToken;
+    private String accessToken;
+    private String refreshToken;
 
-    public SessionResponse(String accessToken) {
+    @Builder
+    public SessionResponse(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 }

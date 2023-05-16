@@ -4,9 +4,11 @@ import com.example.first.entity.Post;
 import com.example.first.entity.User;
 import com.example.first.exception.PostNotFound;
 import com.example.first.repository.MybatisPostRepository;
+import com.example.first.repository.MybatisSessionRepository;
 import com.example.first.repository.MybatisUserRepository;
 import com.example.first.repository.PostRepository;
 import com.example.first.request.PostCreate;
+import com.example.first.request.PostDelete;
 import com.example.first.request.PostEdit;
 import com.example.first.response.PostResponse;
 import org.junit.jupiter.api.Assertions;
@@ -16,8 +18,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -33,13 +37,22 @@ class PostServiceTest {
 
     @Autowired
     private MybatisPostRepository postRepository;
+
     @Autowired
     private MybatisUserRepository userRepository;
+
+    @Autowired
+    private MybatisSessionRepository sessionRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
         // 각 테스트(메서드)가 진행 될 때 마다 실행되는 method
     void clean() {
+        sessionRepository.deleteAll();
         postRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -97,9 +110,18 @@ class PostServiceTest {
     @Test
     @DisplayName("글 1page 조회")
     void test3() throws Exception {
+        User user =User.builder()
+                .name("kook123")
+                .email("kk1@naver.com")
+                .password(passwordEncoder.encode("1234"))
+                .build();
+        userRepository.save(user);
         //given
         List<Post> requestPosts = IntStream.range(1, 31)
-                .mapToObj(i -> Post.builder().title("제목" + i).content("내용" + i)
+                .mapToObj(i -> Post.builder()
+                        .title("제목" + i)
+                        .content("내용" + i)
+                        .userId(user.getId())
                 .build())
                 .collect(Collectors.toList());
 
@@ -115,13 +137,14 @@ class PostServiceTest {
         // 이유는 entity 출력값조회시 용도에 맞지않는 응답이 나올 수 있음
         // service 구현시 요구사항에 맞추려면 너무많은 service가 생성될 수 있음
         //when
-        List<PostResponse> posts = postService.getList(1);
+        Map<String, Object> posts = postService.getList(1,"", "all");
+        List<PostResponse> postList = (List<PostResponse>) posts.get("list");
 
         //then
         Assertions.assertNotNull(posts);
-        assertEquals(10, posts.size());
-        Assertions.assertEquals("제목30",posts.get(0).getTitle());
-        Assertions.assertEquals("내용30",posts.get(0).getContent());
+        assertEquals(10, postList.size());
+        Assertions.assertEquals("제목30", postList.get(0).getTitle());
+        Assertions.assertEquals("제목30", postList.get(0).getTitle());
 //        Assertions.assertEquals("제목1", list.get(0).getTitle());
 //        Assertions.assertEquals("내용1", list.get(0).getContent());
 //        Assertions.assertEquals("제목2", list.get(1).getTitle());
@@ -155,22 +178,36 @@ class PostServiceTest {
     @Test
     @DisplayName("글 삭제")
     void test5() throws Exception {
+        User user =User.builder()
+                .name("kook123")
+                .email("kk1@naver.com")
+                .password(passwordEncoder.encode("1234"))
+                .build();
+        userRepository.save(user);
         //given
         Post post1 = Post.builder()
                 .title("제목")
                 .content("내용")
+                .userId(user.getId())
                 .build();
         Post post2 = Post.builder()
                 .title("제목")
                 .content("내용")
+                .userId(user.getId())
                 .build();
 
 
         postRepository.save(post1);
         postRepository.save(post2);
         //when
-        postService.delete(post1.getId());
-        postService.delete(post2.getId());
+        postService.delete(PostDelete.builder()
+                .postId(post1.getId())
+                .userId(user.getId())
+                .build());
+        postService.delete(PostDelete.builder()
+                .postId(post2.getId())
+                .userId(user.getId())
+                .build());
 
         //then
         Assertions.assertEquals(0, postRepository.count());
@@ -219,7 +256,9 @@ class PostServiceTest {
         //when
         //expected
         assertThrows(PostNotFound.class, ()->{
-            postService.delete(post.getId()+1L);
+            postService.delete(PostDelete.builder()
+                            .postId(post.getId()+1L)
+                    .build());
         });
     }
     @Test

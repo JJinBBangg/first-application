@@ -1,42 +1,64 @@
 <script setup>
-import {ref} from "vue";
+import { mapGetters } from 'vuex';
+import axios from 'axios';
+import store from "@/stores/store";
+import { ref } from 'vue';
+import router from "@/router";
+import Cookies from "vue-cookies";
 
-import axios from "axios";
-import {useRouter} from "vue-router";
+const form = ref({
+    title: '',
+    content: '',
+});
+const rules = {
+    title: [{ required: true, message: '제목을 입력해주세요', trigger: 'blur' }],
+    content: [{ required: true, message: '내용을 입력해주세요', trigger: 'blur' }],
+};
 
-const router= useRouter();
+const write = () => {
+    const token = Cookies.get('accessToken');
+    console.log(token)
+    axios
+        .post('/api/posts', {
+            title: form.value.title,
+            content: form.value.content,
+        }, {
+            headers: {
+                Authorization: token,
+            },
+        })
+        .then(() => {
+            router.replace({ name: "home" });
+        })
+        .catch((error) => {
+            if (error.response) {
+                const errorCode = error.response.data.code;
+                const errorMessage = error.response.data.message;
+                alert(`Error ${errorCode}: ${errorMessage}`);
+            }
+        });
+};
 
-const title =ref("")
-const content = ref("")
-
-const write = function (){
-    axios.post("/api/posts",{
-        title: title.value,
-        content : content.value
-    }
-    ).then(()=>{
-        router.replace({name : 'home'})
-    }).catch(error =>{
-        alert(error)
-    })
-}
 </script>
 
+
 <template>
-
-
     <div>
-        <el-input v-model="title" placeholder="제목을 입력해주세요" />
-    </div>
-
-    <div class="my-2">
-        <el-input v-model="content" type="textarea" rows="15" />
-    </div>
-
-    <div class="my-2">
-        <el-button type="primary" @click="write()"> 글 작성 완료</el-button>
+        <el-form :model="form" :rules="rules">
+            <el-form-item label="제목" required>
+                <el-input v-model="form.title" placeholder="제목을 입력해주세요" />
+            </el-form-item>
+            <el-form-item label="내용" required>
+                <el-input v-model="form.content" type="textarea" rows="15" />
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="write()">글 작성 완료</el-button>
+            </el-form-item>
+        </el-form>
     </div>
 </template>
+
+
 
 <style>
 
