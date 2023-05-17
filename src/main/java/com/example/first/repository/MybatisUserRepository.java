@@ -2,6 +2,7 @@ package com.example.first.repository;
 
 import com.example.first.entity.User;
 import com.example.first.request.Login;
+import com.example.first.request.UserEdit;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -65,4 +66,16 @@ public interface MybatisUserRepository {
             WHERE name = #{name}
             """)
     Optional<User> findByMame(String name);
+
+    @Update("""
+            <script>
+            
+            UPDATE MEMBER SET
+                name = #{name},
+                content = #{password}
+            WHERE ID = #{userId}
+            
+            </script>
+            """)
+    void update(UserEdit userEdit);
 }

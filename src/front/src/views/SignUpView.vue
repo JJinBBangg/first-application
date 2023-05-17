@@ -31,6 +31,7 @@ import {computed, ref} from 'vue';
 import axios from 'axios';
 import router from "@/router";
 import store from "@/stores/store";
+import {showCustomAlert} from "@/main";
 
 export default {
     data() {
@@ -131,9 +132,8 @@ export default {
                 })
                 .catch((error) => {
                     if (error.response) {
-                        const errorCode = error.response.data.code;
                         const errorMessage = error.response.data.message;
-                        alert(`Error ${errorCode}: ${errorMessage}`);
+                        showCustomAlert(`${errorMessage}`)
                     }
                 });
 
@@ -154,9 +154,8 @@ export default {
                         })
                         .catch((error) => {
                             if (error.response) {
-                                const errorCode = error.response.data.code;
                                 const errorMessage = error.response.data.message;
-                                alert(`Error ${errorCode}: ${errorMessage}`);
+                                showCustomAlert(`${errorMessage}`)
                             }
                         });
                 }

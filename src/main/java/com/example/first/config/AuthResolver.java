@@ -42,17 +42,21 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
         String refreshJws = webRequest.getHeader("RefreshToken");
         String jws = "";
         //refreshToken 검증 및 처리
-        if(!(refreshJws == null || refreshJws.equals(""))){
-           jws = webRequest.getHeader("Authorization");
-            Jws<Claims> claims = Jwts.parserBuilder()
-                    .setSigningKey(appConfig.getKey())
-//                .setAllowedClockSkewSeconds(60) // 1분까지는 시간차이를 허용
-                    .build()
-                    .parseClaimsJws(jws);
-            String userId = claims.getBody().getSubject();
-            return UserSession.builder()
-                    .userId(Long.valueOf(userId))
-                    .build();
+        if(refreshJws != null && !refreshJws.equals("")){
+           jws = webRequest.getHeader("RefreshToken");
+           try{
+               Jws<Claims> claims = Jwts.parserBuilder()
+                        .setSigningKey(appConfig.getKey())
+//                        .setAllowedClockSkewSeconds(60) // 1분까지는 시간차이를 허용
+                        .build()
+                        .parseClaimsJws(jws);
+                String userId = claims.getBody().getSubject();
+                return UserSession.builder()
+                        .userId(Long.valueOf(userId))
+                        .build();
+           } catch (ExpiredJwtException e){
+               throw new Unauthorized("로그인 인증이 만료되었습니다.");
+           }
         } else if (accessJws == null || accessJws.equals("")) {
             throw new Unauthorized("로그인이 필요합니다.");
         } else {

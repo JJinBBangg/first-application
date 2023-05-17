@@ -34,7 +34,7 @@ public class AuthController {
                 .setSubject(String.valueOf(logedinUserSession.getUserId()))
                 .signWith(appConfig.getKey())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + (1800L * 1000L))) // 30분
+                .setExpiration(new Date(System.currentTimeMillis() + (30 * 60 * 1000L))) // 30분
                 .compact();
 
         String refreshJws = Jwts.builder()
@@ -91,11 +91,12 @@ public class AuthController {
     }
     @PostMapping("/auth/user/{service}")
     public AuthUser authUser(@RequestBody AuthUser authUser, @PathVariable String service, UserSession userSession){
-        log.info(">>>>service : {}", service);
+        log.info(">>>auth/user/ {}", service);
         AuthUser authedUser =authService.authUser(AuthUser.builder()
                         .email(authUser.getEmail())
                         .postId(authUser.getPostId())
                         .userId(authUser.getUserId())
+                        .password(authUser.getPassword())
                         .service(service)
                         .name(authUser.getName())
                         .authedUserId(userSession.getUserId())
@@ -104,6 +105,7 @@ public class AuthController {
     }
     @PostMapping("/auth/signup/{service}")
     public AuthUser authUser(@RequestBody AuthUser authUser, @PathVariable String service){
+        log.info("auth/signup/ {}", service);
         AuthUser authedUser =authService.authUser(AuthUser.builder()
                 .email(authUser.getEmail())
                 .name(authUser.getName())

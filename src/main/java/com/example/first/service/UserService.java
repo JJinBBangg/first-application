@@ -6,6 +6,7 @@ import com.example.first.exception.DuplicateEmail;
 import com.example.first.exception.UserNotFound;
 import com.example.first.repository.MybatisUserRepository;
 import com.example.first.request.UserCreate;
+import com.example.first.request.UserEdit;
 import com.example.first.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,5 +50,9 @@ public class UserService {
                 .name(user.getName())
                 .dateTime(user.getDateTime())
                 .build();
+    }
+
+    public void edit(UserEdit userEdit) {
+        mybatisUserRepository.update(userEdit);
     }
 }

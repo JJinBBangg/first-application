@@ -4,6 +4,7 @@ import store from "@/stores/store";
 import axios from "axios";
 import {useRouter} from "vue-router";
 import Cookies from "vue-cookies";
+import {showCustomAlert} from "@/main";
 
 const router = useRouter()
 const post = ref({
@@ -26,14 +27,13 @@ onMounted(() => {
             post.value = response.data;
         }).catch(error => {
         if (error.response) {
-            const errorCode = error.response.data.code;
             const errorMessage = error.response.data.message;
-            alert(`Error ${errorCode}: ${errorMessage}`)
+            showCustomAlert(`${errorMessage}`)
         }
     })
 })
 
-const edit = function () {
+const edit = () => {
 
     const token = Cookies.get('accessToken');
     axios.patch(`/api/posts/${props.postId}`, {
@@ -47,9 +47,8 @@ const edit = function () {
         router.replace({name: 'post'})
     }).catch(error => {
         if (error.response) {
-            const errorCode = error.response.data.code;
             const errorMessage = error.response.data.message;
-            alert(`Error ${errorCode}: ${errorMessage}`)
+            showCustomAlert(`${errorMessage}`)
         }
     })
 }

@@ -5,6 +5,7 @@ import com.example.first.entity.UserSession;
 import com.example.first.exception.InvalidRequest;
 import com.example.first.exception.InvalidSigninInformation;
 import com.example.first.exception.Unauthorized;
+import com.example.first.exception.UserNotFound;
 import com.example.first.repository.MybatisPostRepository;
 import com.example.first.repository.MybatisSessionRepository;
 import com.example.first.repository.MybatisUserRepository;
@@ -63,15 +64,24 @@ public class AuthService {
                             .authResult(false)
                             .build();
                 }
-            case "login":
-                return AuthUser.builder()
-                    .authResult(true)
-                    .build();
             case "name":
                 if(authUser.getName().equals("")){
                     throw new Unauthorized("닉네임을 입력하세요.");
                 }
                 if(userRepository.findByMame(authUser.getName()).isEmpty()){
+                    return AuthUser.builder()
+                            .name(authUser.getName())
+                            .authResult(true)
+                            .build();
+                } else {
+                    return AuthUser.builder()
+                            .name(authUser.getName())
+                            .authResult(false)
+                            .build();
+                }
+            case "password":
+                User user = userRepository.findById(authUser.getAuthedUserId()).orElseThrow(UserNotFound::new);
+                if(passwordEncoder.matches(authUser.getPassword(), user.getPassword())){
                     return AuthUser.builder()
                             .authResult(true)
                             .build();
@@ -80,6 +90,11 @@ public class AuthService {
                             .authResult(false)
                             .build();
                 }
+            case "login":
+                return AuthUser.builder()
+                    .authResult(true)
+                    .build();
+
             default: throw new InvalidRequest();
         }
     }

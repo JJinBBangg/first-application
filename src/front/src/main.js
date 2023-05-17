@@ -2,12 +2,12 @@ import {createApp} from 'vue'
 import {createPinia} from 'pinia'
 import App from './App.vue'
 import router from './router'
-
+import axios from 'axios';
+import Cookies from "vue-cookies";
+import store from "@/stores/store";
 import 'element-plus/dist/index.css'
 import ElementPlus from 'element-plus'
-
 import "bootstrap/dist/css//bootstrap-utilities.css"
-
 import './assets/main.css'
 
 const app = createApp(App)
@@ -17,9 +17,17 @@ app.use(ElementPlus)
 app.mount('#app')
 
 
-import axios from 'axios';
-import Cookies from "vue-cookies";
-import store from "@/stores/store";
+export const showCustomAlert = (message) => {
+    const customAlert = document.createElement('div');
+    customAlert.classList.add('custom-alert');
+    customAlert.textContent = message;
+
+    document.body.appendChild(customAlert);
+
+    setTimeout(() => {
+        customAlert.remove();
+    }, 1500);
+}
 
 const token = Cookies.get('accessToken');
 if (token) {
@@ -38,25 +46,26 @@ axios.interceptors.response.use(
             const refreshToken = Cookies.get('refreshToken');
             if (refreshToken) {
                 axios
-                    .post("/auth/login/refresh", {}, {
+                    .post("api/auth/login/refresh", {}, {
                         headers: {
-                            RefreshToken: refreshToken,
+                            RefreshToken : refreshToken,
                         },
                     })
                     .then((response) => {
                         const accessToken = response.data.accessToken;
                         if (accessToken) {
-                            Cookies.set('accessToken', accessToken, { expires : new Date().getTime() + (40 * 60 * 1000) });
+                            Cookies.set('accessToken', accessToken, 60*60);
                             store.commit('setToken', accessToken);
-                            // 1시간 동안 유효한 쿠키 설정 // 서버의 token 유효기간보다 30분 길게 설정
                         }
                         const refreshToken = response.data.refreshToken;
                         if(refreshToken){ //
-                            Cookies.set('refreshToken', refreshToken, { expires: 31 });
-                            // 31일 동안 유효한 쿠키 설정 // 서버의 token 유효기간보다 1일 길게 설정
+                            Cookies.set('refreshToken', refreshToken, 60*60*24*30);
                         }
-                    });
-            }
+                        router.replace({ name: "home" });
+                    })
+            } else {
+                store.commit("setToken", "");}
+                router.replace({ name: "home" });
         }
             return Promise.reject(error);
     }

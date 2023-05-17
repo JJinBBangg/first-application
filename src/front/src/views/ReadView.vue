@@ -5,6 +5,7 @@ import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import store from "@/stores/store";
 import Cookies from "vue-cookies";
+import { showCustomAlert } from '@/main.js';
 
 const router = useRouter();
 const props = defineProps({
@@ -35,9 +36,8 @@ const moveToEdit = () => {
         })
         .catch((error) => {
             if (error.response) {
-                const errorCode = error.response.data.code;
                 const errorMessage = error.response.data.message;
-                alert(`Error ${errorCode}: ${errorMessage}`);
+                showCustomAlert(`${errorMessage}`)
             }
         });
 }
@@ -52,13 +52,13 @@ const deletePost = () => {
             },
         })
             .then(() => {
+                showCustomAlert('삭제가 완료되었습니다.')
                 router.replace({ name: "post" });
             })
             .catch((error) => {
                 if (error.response) {
-                    const errorCode = error.response.data.code;
                     const errorMessage = error.response.data.message;
-                    alert(`Error ${errorCode}: ${errorMessage}`);
+                    showCustomAlert(`${errorMessage}`)
                 }
             });
     }
@@ -68,9 +68,8 @@ onMounted(() => {
         post.value = response.data;
     }).catch(error => {
         if (error.response) {
-            const errorCode = error.response.data.code;
             const errorMessage = error.response.data.message;
-            alert(`에러코드(${errorCode}) : ${errorMessage}`)
+            showCustomAlert(`${errorMessage}`)
         }
     })
 });

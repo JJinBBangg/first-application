@@ -12,15 +12,17 @@ public class AuthUser {
     private Long userId;
     private String name;
     private String service;
+    private String password;
     private Long authedUserId;
     private boolean authResult;
 
     @Builder
-    public AuthUser(String email, Long postId, Long userId, String service,String name, Long authedUserId, boolean authResult) {
+    public AuthUser(String email, Long postId, Long userId, String service,String name, Long authedUserId, boolean authResult, String password) {
         this.email = email;
         this.postId = postId;
         this.service = service;
         this.userId = userId;
+        this.password = password;
         this.authedUserId = authedUserId;
         this.authResult = authResult;
         this.name = name;

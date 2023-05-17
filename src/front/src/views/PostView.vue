@@ -5,8 +5,8 @@ import {RouterLink} from "vue-router";
 import router from "@/router";
 import store from "@/stores/store";
 import Cookies from "vue-cookies";
+import {showCustomAlert} from "@/main";
 
-const posts = ref([]);
 const currentPage = ref(1);
 const postsTotal = ref(0);
 
@@ -30,6 +30,7 @@ const getNextPage = () => {
 };
 const search = ref("");
 const type = ref('all');
+const posts = ref([]);
 
 const fetchData = () => {
     axios
@@ -40,9 +41,8 @@ const fetchData = () => {
         })
         .catch((error) => {
             if (error.response) {
-                const errorCode = error.response.data.code;
                 const errorMessage = error.response.data.message;
-                alert(`Error ${errorCode}: ${errorMessage}`);
+                showCustomAlert(`${errorMessage}`)
             }
         });
 };
@@ -56,13 +56,12 @@ const write = () => {
                 Authorization: token,
             }
         }).then((response) => {
-        if (true == response.data.authResult) router.replace({name: "write"});
-    })
-        .catch((error) => {
+        if (true == response.data.authResult)
+            router.replace({name: "write"});
+        }).catch((error) => {
             if (error.response) {
-                const errorCode = error.response.data.code;
                 const errorMessage = error.response.data.message;
-                alert(`Error ${errorCode}: ${errorMessage}`);
+                showCustomAlert(`${errorMessage}`)
             }
         });
 };

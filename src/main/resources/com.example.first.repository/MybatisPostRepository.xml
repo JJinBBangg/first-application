@@ -80,7 +80,6 @@
     ORDER BY p.id DESC
     LIMIT 10 OFFSET ${(page > 0) ? (page-1) * 10 : 0}
     </select>
-
     <resultMap id="postWithFilesAndUserListCount" type="Post">
         <id property="id"           column="id"/>
         <result property="title"    column="title"/>

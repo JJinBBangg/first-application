@@ -17,7 +17,6 @@ const rules = {
 
 const write = () => {
     const token = Cookies.get('accessToken');
-    console.log(token)
     axios
         .post('/api/posts', {
             title: form.value.title,

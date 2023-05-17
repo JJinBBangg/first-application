@@ -4,15 +4,18 @@ import {computed, ref, watch} from "vue";
 import store from "@/stores/store";
 import Cookies from "vue-cookies";
 import router from "@/router";
-
 const token = computed(() => store.getters.getToken);
 const isLoggedIn = computed(() => !!token.value);
 
 const logout = function () {
+    console.log(Cookies.get('accessToken'))
+    console.log(Cookies.get('refreshToken'))
     store.commit("setToken", ""); // 로그아웃 시 토큰 초기화
     Cookies.remove('accessToken'); // 쿠키에서 access token 값 삭제
     Cookies.remove('refreshToken'); // 쿠키에서 refresh token 값 삭제
     router.replace({name: "home"})
+    console.log(Cookies.get('accessToken'))
+    console.log(Cookies.get('refreshToken'))
 };
 
 </script>
@@ -39,9 +42,9 @@ const logout = function () {
             <el-menu-item v-else @click="logout()" index="3">로그아웃
                 <el-sub-menu index="5" @click.stop="">
                     <template #title>개인정보수정</template>
-                    <el-menu-item index="4-1">회원정보수정</el-menu-item>
+                    <RouterLink to="/user"><el-menu-item index="4-1">회원정보수정</el-menu-item></RouterLink>
                     <el-menu-item index="4-2">1:1 문의</el-menu-item>
-                    <el-menu-item index="4-3">탈퇴 </el-menu-item>
+                    <el-menu-item index="4-3">*********</el-menu-item>
                 </el-sub-menu>
             </el-menu-item>
 

@@ -40,6 +40,7 @@ const email = ref("");
 const password = ref("");
 const {setToken} = mapMutations(["setToken"]);
 import Cookies from 'vue-cookies';
+import {showCustomAlert} from "@/main";
 
 const router = useRouter();
 
@@ -54,21 +55,20 @@ const login = () => {
     }).then((response) => {
         const accessToken = response.data.accessToken;
         if (accessToken) {
-            Cookies.set('accessToken', accessToken, {expires: new Date().getTime() + (60 * 60 * 1000)});
+            Cookies.set('accessToken', accessToken, 60 * 60);
             store.commit('setToken', accessToken);
             // 1시간 동안 유효한 쿠키 설정 // 서버의 token 유효기간보다 30분 길게 설정
         }
         const refreshToken = response.data.refreshToken;
         if (keepLogin.value == true) { //
-            Cookies.set('refreshToken', refreshToken, {expires: 31});
+            Cookies.set('refreshToken', refreshToken, 60*60*24*31);
             // 31일 동안 유효한 쿠키 설정 // 서버의 token 유효기간보다 1일 길게 설정
         }
         router.replace({name: "home"});
     }).catch((error) => {
         if (error.response) {
-            const errorCode = error.response.data.code;
             const errorMessage = error.response.data.message;
-            alert(`Error ${errorCode}: ${errorMessage}`);
+            showCustomAlert(`${errorMessage}`)
         }
     });
 }

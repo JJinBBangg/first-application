@@ -3,6 +3,7 @@ import axios from "axios";
 import {computed, onMounted, ref} from "vue";
 import {RouterLink} from "vue-router";
 import Cookies from "vue-cookies";
+import {showCustomAlert} from "@/main";
 
 const posts = ref([]);
 const currentPage = ref(1);
@@ -18,9 +19,8 @@ const fetchData = () => {
         })
         .catch((error) => {
             if (error.response) {
-                const errorCode = error.response.data.code;
                 const errorMessage = error.response.data.message;
-                alert(`Error ${errorCode}: ${errorMessage}`);
+                showCustomAlert(`${errorMessage}`)
             }
         });
 };
