@@ -32,10 +32,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //    }
 
     // 요청 경로 가져오는 메서드
-    private String getRequestPath() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        return request.getRequestURI();
-    }
+//    private String getRequestPath() {
+//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+//        return request.getRequestURI();
+//    }
 
     // 아규먼트 리졸버를 이용하여 로그인 검증
 
@@ -50,7 +50,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        registry.addMapping("/**")
 //                .allowedOrigins("http://localhost:5173");
 //    }
-
+//
 //    @Override // 뷰로 던질 주소찾아가는 메소드
 //    public void addViewControllers(ViewControllerRegistry registry) {
 //        WebMvcConfigurer.super.addViewControllers(registry);

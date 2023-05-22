@@ -6,7 +6,6 @@ import com.example.first.exception.PostNotFound;
 import com.example.first.repository.MybatisPostRepository;
 import com.example.first.repository.MybatisSessionRepository;
 import com.example.first.repository.MybatisUserRepository;
-import com.example.first.repository.PostRepository;
 import com.example.first.request.PostCreate;
 import com.example.first.request.PostDelete;
 import com.example.first.request.PostEdit;

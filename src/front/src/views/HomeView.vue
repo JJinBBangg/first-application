@@ -4,35 +4,52 @@ import {computed, onMounted, ref} from "vue";
 import {RouterLink} from "vue-router";
 import Cookies from "vue-cookies";
 import {showCustomAlert} from "@/main";
+import QRCode from 'qrcode';
 
 const posts = ref([]);
 const currentPage = ref(1);
 const postsTotal = ref(0);
 
+const name = ref();
+const QRvalue = ref("");
+const qrCanvas = ref(null)
+const generateQRCode = function (){
+    QRCode.toCanvas(qrCanvas.value, QRvalue.value, { width: 200 }, (error) => {
+        if (error) {
+            console.error(error)
+        }
+    })
+}
 
-const fetchData = () => {
-    axios
-        .get(`/api/posts?page=${currentPage.value}`)
-        .then((response) => {
-            posts.value = response.data.list;
-            postsTotal.value = response.data.count;
-        })
-        .catch((error) => {
-            if (error.response) {
-                const errorMessage = error.response.data.message;
-                showCustomAlert(`${errorMessage}`)
-            }
-        });
+
+const fetchData = async () => {
+    try {
+        const response = await axios.get(`/api/posts?page=${currentPage.value}`);
+        posts.value = response.data.list;
+        postsTotal.value = response.data.count;
+        QRvalue.value = response.data.count.toString();
+    } catch (error) {
+        if (error.response) {
+            const errorMessage = error.response.data.message;
+            showCustomAlert(`${errorMessage}`);
+        }
+    }
 };
 
 // 초기 데이터 로딩
-fetchData();
+(async () => {
+    await fetchData();
+    generateQRCode();
+})();
 
-const totalPages = computed(() => Math.ceil(postsTotal.value / 10));
+    const totalPages = computed(() => Math.ceil(postsTotal.value / 10));
 </script>
 
 <template>
     <main>
+        <div>
+            <canvas ref="qrCanvas"></canvas>
+        </div>
         <ol>
             <li v-for="post in posts" :key="post.id">
                 <div class="title">
@@ -48,9 +65,8 @@ const totalPages = computed(() => Math.ceil(postsTotal.value / 10));
                 </div>
             </li>
         </ol>
-       </main>
+    </main>
 </template>
-
 
 
 <style scoped>
@@ -98,4 +114,10 @@ li:last-child {
 .el-button {
     margin: 0 5px;
 }
+ /*div {*/
+ /*    display: flex;*/
+ /*    justify-content: center;*/
+ /*    align-items: center;*/
+ /*    height: 100vh;*/
+ /*}*/
 </style>

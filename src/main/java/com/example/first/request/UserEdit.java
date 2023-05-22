@@ -2,10 +2,12 @@ package com.example.first.request;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserEdit {
     private String name;
     private String password;

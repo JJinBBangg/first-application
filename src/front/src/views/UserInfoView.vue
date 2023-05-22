@@ -4,7 +4,7 @@
             <el-form-item label="이메일" prop="email" required>{{ form.email }}
             </el-form-item>
             <el-form-item label="이전 비밀번호" prop="oldPassword" required>
-                <el-input v-model="form.oldPassword" type="password" @blur="checkPasswordAvailability"
+                <el-input v-model="form.oldPassword" type="password" @keyup="checkPasswordAvailability"
                           placeholder="이전 비밀번호"></el-input>
             </el-form-item>
             <el-form-item label="수정 비밀번호" prop="password" required>
@@ -20,8 +20,8 @@
                 <el-button @click="checkNameAvailability" type="primary">중복 검증</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="submitForm">수정완료</el-button>
-                <el-button type="danger" @click="submitForm">탈퇴</el-button>
+                <el-button type="warning" @click="editForm">수정</el-button>
+                <el-button type="danger" @click="deleteForm">탈퇴</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -46,6 +46,7 @@ const rules = {
     oldPassword: [
         {required: true, message: '기존 비밀번호를 입력해주세요', trigger: 'blur'},
         {validator: validateConfirmOldPassword, trigger: 'blur'},
+        {min: 6, message: '비밀번호는 최소 6자 이상', trigger: 'blur'},
     ],
     password: [
         {required: true, message: '새로운 비밀번호를 입력해주세요', trigger: 'blur'},
@@ -59,6 +60,7 @@ const rules = {
         {required: false, message: '변경할 닉네임을 입력해주세요', trigger: 'blur'},
     ],
 }
+
 function validateConfirmOldPassword(rule, value, callback) {
     if (form.value.authPassword !== true) {
         callback(new Error('기존 비밀번호가 일치하지 않습니다'));
@@ -74,6 +76,7 @@ function validateConfirmPassword(rule, value, callback) {
         callback();
     }
 }
+
 const checkPasswordAvailability = () => {
     const token = Cookies.get('accessToken');
     axios
@@ -86,6 +89,7 @@ const checkPasswordAvailability = () => {
         })
         .then((response) => {
             const valid = response.data.authResult;
+            console.log(valid)
             const showCustomAlert = (message) => {
                 const customAlert = document.createElement('div');
                 customAlert.classList.add('custom-alert');
@@ -114,12 +118,15 @@ const checkPasswordAvailability = () => {
         });
 }
 const checkNameAvailability = () => {
+    console.log(form.value.email)
     axios
         .post('/api/auth/signup/name', {
             name: form.value.nickname,
+            email: form.value.email
         })
         .then((response) => {
             const valid = response.data.authResult;
+            console.log(valid)
             const name = response.data.name;
             const showCustomAlert = (message) => {
                 const customAlert = document.createElement('div');
@@ -135,9 +142,9 @@ const checkNameAvailability = () => {
 
             if (valid) {
                 showCustomAlert('사용 가능한 닉네임입니다.');
-            } else if (name == form.value.nickname) {
-                showCustomAlert('기존 닉네임과 동일합니다.');
-            } else {
+            } /*else if (name == form.value.nickname) {
+                showCustomAlert('사용 가능한 닉네임입니다.');*/
+             else {
                 showCustomAlert('중복된 닉네임입니다.');
             }
         })
@@ -148,54 +155,79 @@ const checkNameAvailability = () => {
             }
         });
 };
-const submitForm = () => {
-    const token = Cookies.get('Authorization')
-    validate().then((valid) => {
-        if (valid) {
-            axios
-                .patch('/api/user', {
-                    password: form.value.password,
-                    name: form.value.nickname,
-                },{
-                  headers:{
-                      Authorization : token
-                  }
-                })
-                .then(() => {
-                    alert("수정이 완료되었습니다.")
-                    router.replace({name: "home"});
-                })
-                .catch((error) => {
-                    if (error.response) {
-                        const errorMessage = error.response.data.message;
-                        showCustomAlert(`${errorMessage}`)
-                    }
-                });
-        }
-    });
-};
-
-const fetchData = () => {
+const loginFormRef = ref(null);
+const editForm = () => {
     const token = Cookies.get('accessToken');
-    try {
-        const response = axios.get(`/api/user/auth`, {
-            headers: {
-                Authorization: token,
-            },
-        });
-        form.value.email = response.data.email;
-        form.value.nickname = response.data.name;
-    } catch (error) {
-        if (error.response) {
-            const errorCode = error.response.data.code;
-            const errorMessage = error.response.data.message;
-            alert(`Error ${errorCode}: ${errorMessage}`);
-        }
+    console.log(loginFormRef.value)
+    if (loginFormRef.value) {
+        axios
+            .patch('/api/user', {
+                password: form.value.password,
+                name: form.value.nickname,
+            }, {
+                headers: {
+                    Authorization: token,
+                },
+            })
+            .then(() => {
+                alert("수정이 완료되었습니다.")
+                router.replace({name: "home"});
+            })
+            .catch((error) => {
+                if (error.response) {
+                    const errorMessage = error.response.data.message;
+                    showCustomAlert(`${errorMessage}`)
+                }
+            });
     }
 }
-fetchData();
+const deleteForm = () => {
+    const token = Cookies.get('accessToken');
+    console.log(loginFormRef.value)
+    if (loginFormRef.value) {
+        axios
+            .delete('/api/user', {
+                password: form.value.oldPassword,
+            }, {
+                headers: {
+                    Authorization: token,
+                },
+            })
+            .then(() => {
+                alert("삭제가 완료되었습니다.")
+                router.replace({name: "home"});
+            })
+            .catch((error) => {
+                if (error.response) {
+                    const errorMessage = error.response.data.message;
+                    showCustomAlert(`${errorMessage}`)
+                }
+            });
+    }
+}
+
+const loginForm = ref(null)
+onMounted(() => {
+    loginFormRef.value = loginForm;
+    const token = Cookies.get('accessToken');
+    axios.post(`/api/auth/user/auth`,
+        {},
+        {
+            headers: {
+                Authorization: token
+            }
+        }).then((response) => {
+        form.value.email = response.data.email;
+        form.value.nickname = response.data.name;
+    }).catch((error) => {
+        if (error.response) {
+            const errorMessage = error.response.data.message;
+            showCustomAlert(`${errorMessage}`)
+        }
+    })
+})
 </script>
-<style>
+<style scoped>
 .container {
     display: flex;
     flex-direction: column;
@@ -215,6 +247,10 @@ fetchData();
 
 .error-message {
     color: red;
+}
+
+.error-message {
+    color: blue;
 }
 
 .custom-alert {

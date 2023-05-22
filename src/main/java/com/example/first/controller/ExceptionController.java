@@ -5,6 +5,7 @@ import com.example.first.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,9 +30,13 @@ public class ExceptionController {
 //        response.put(field, message);
         ErrorResponse response = ErrorResponse.builder()
                 .code("400")
-                .message("잘못된 요청입니다.")
+                .message(e.getFieldErrors().get(0).getDefaultMessage())
                 .build();
+        log.info(">>>>>>{}",e.getFieldErrors().get(0).getDefaultMessage());
+//        log.info(">>>>>>{}",fieldError.getField());
+//        log.info(">>>>>>{}",fieldError.getDefaultMessage());
 //        for (FieldError fieldError : e.getFieldErrors()) {
+//
 //            response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
 //        }
 

@@ -5,6 +5,7 @@ import store from "@/stores/store";
 import { ref } from 'vue';
 import router from "@/router";
 import Cookies from "vue-cookies";
+import {showCustomAlert} from "@/main";
 
 const form = ref({
     title: '',
@@ -27,13 +28,12 @@ const write = () => {
             },
         })
         .then(() => {
-            router.replace({ name: "home" });
+            router.replace({ name: "post" });
         })
         .catch((error) => {
             if (error.response) {
-                const errorCode = error.response.data.code;
                 const errorMessage = error.response.data.message;
-                alert(`Error ${errorCode}: ${errorMessage}`);
+                showCustomAlert(`${errorMessage}`)
             }
         });
 };

@@ -2,10 +2,7 @@ package com.example.first.service;
 
 import com.example.first.entity.User;
 import com.example.first.entity.UserSession;
-import com.example.first.exception.InvalidRequest;
-import com.example.first.exception.InvalidSigninInformation;
-import com.example.first.exception.Unauthorized;
-import com.example.first.exception.UserNotFound;
+import com.example.first.exception.*;
 import com.example.first.repository.MybatisPostRepository;
 import com.example.first.repository.MybatisSessionRepository;
 import com.example.first.repository.MybatisUserRepository;
@@ -68,20 +65,19 @@ public class AuthService {
                 if(authUser.getName().equals("")){
                     throw new Unauthorized("닉네임을 입력하세요.");
                 }
-                if(userRepository.findByMame(authUser.getName()).isEmpty()){
+
+                if(!userRepository.findByName(authUser.getName()).isEmpty()
+                        && !userRepository.findByName(authUser.getName()).orElseThrow().getEmail().equals(authUser.getEmail())){
+                    throw new DuplicateEmail("중복된 닉네임입니다.");
+                }
                     return AuthUser.builder()
                             .name(authUser.getName())
                             .authResult(true)
                             .build();
-                } else {
-                    return AuthUser.builder()
-                            .name(authUser.getName())
-                            .authResult(false)
-                            .build();
-                }
+
             case "password":
-                User user = userRepository.findById(authUser.getAuthedUserId()).orElseThrow(UserNotFound::new);
-                if(passwordEncoder.matches(authUser.getPassword(), user.getPassword())){
+                User user1 = userRepository.findById(authUser.getAuthedUserId()).orElseThrow(UserNotFound::new);
+                if(passwordEncoder.matches(authUser.getPassword(), user1.getPassword())){
                     return AuthUser.builder()
                             .authResult(true)
                             .build();
@@ -94,6 +90,13 @@ public class AuthService {
                 return AuthUser.builder()
                     .authResult(true)
                     .build();
+            case "auth":
+                User authedUser =userRepository.findById(authUser.getAuthedUserId()).orElseThrow();
+                return AuthUser.builder()
+                        .email(authedUser.getEmail())
+                        .name(authedUser.getName())
+                        .authResult(true)
+                        .build();
 
             default: throw new InvalidRequest();
         }

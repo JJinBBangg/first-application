@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
  */
 @Getter
 //@JsonInclude(value = JsonInclude.Include.NON_EMPTY)//값이없으면 전송하지 않음
+@Setter
 public class ErrorResponse {
     private final String code;
     private final String message;

@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import {onMounted, ref} from "vue";
-import {useRouter} from "vue-router";
+import {RouterLink, useRouter} from "vue-router";
 import store from "@/stores/store";
 import Cookies from "vue-cookies";
 import { showCustomAlert } from '@/main.js';
@@ -84,4 +84,5 @@ onMounted(() => {
     <p>작성자 : {{ post.name }}</p>
     <el-button type="warning" @click="moveToEdit()">수정</el-button>
     <el-button type="danger" @click="deletePost()">삭제</el-button>
+    <el-button type="info" @click="$router.go(-1)" >이전</el-button>
 </template>

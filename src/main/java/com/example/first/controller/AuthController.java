@@ -26,9 +26,10 @@ public class AuthController {
 
     private final AuthService authService;
     private final AppConfig appConfig;
+
     @PostMapping("/auth/login")
-    public SessionResponse login(@RequestBody Login login){
-        UserSession logedinUserSession= authService.signIn(login);
+    public SessionResponse login(@RequestBody Login login) {
+        UserSession logedinUserSession = authService.signIn(login);
 
         String jws = Jwts.builder()
                 .setSubject(String.valueOf(logedinUserSession.getUserId()))
@@ -49,8 +50,9 @@ public class AuthController {
                 .refreshToken(refreshJws)
                 .build();
     }
+
     @PostMapping("/auth/login/refresh")
-    public SessionResponse refresh(UserSession userSession){
+    public SessionResponse refresh(UserSession userSession) {
 
         String jws = Jwts.builder()
                 .setSubject(String.valueOf(userSession.getUserId()))
@@ -71,6 +73,7 @@ public class AuthController {
                 .refreshToken(refreshJws)
                 .build();
     }
+
     @PostMapping("/auth/logout")
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         // 클라이언트의 세션을 무효화하여 로그아웃 처리
@@ -89,24 +92,26 @@ public class AuthController {
         }
         return ResponseEntity.ok("로그아웃되었습니다.");
     }
+
     @PostMapping("/auth/user/{service}")
-    public AuthUser authUser(@RequestBody AuthUser authUser, @PathVariable String service, UserSession userSession){
+    public AuthUser authUser(@RequestBody AuthUser authUser, @PathVariable String service, UserSession userSession) {
         log.info(">>>auth/user/ {}", service);
-        AuthUser authedUser =authService.authUser(AuthUser.builder()
-                        .email(authUser.getEmail())
-                        .postId(authUser.getPostId())
-                        .userId(authUser.getUserId())
-                        .password(authUser.getPassword())
-                        .service(service)
-                        .name(authUser.getName())
-                        .authedUserId(userSession.getUserId())
-                        .build());
+        AuthUser authedUser = authService.authUser(AuthUser.builder()
+                .email(authUser.getEmail())
+                .postId(authUser.getPostId())
+                .userId(authUser.getUserId())
+                .password(authUser.getPassword())
+                .service(service)
+                .name(authUser.getName())
+                .authedUserId(userSession.getUserId())
+                .build());
         return authedUser;
     }
+
     @PostMapping("/auth/signup/{service}")
-    public AuthUser authUser(@RequestBody AuthUser authUser, @PathVariable String service){
+    public AuthUser authUser(@RequestBody AuthUser authUser, @PathVariable String service) {
         log.info("auth/signup/ {}", service);
-        AuthUser authedUser =authService.authUser(AuthUser.builder()
+        AuthUser authedUser = authService.authUser(AuthUser.builder()
                 .email(authUser.getEmail())
                 .name(authUser.getName())
                 .service(service)

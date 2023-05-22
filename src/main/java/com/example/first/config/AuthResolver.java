@@ -41,9 +41,9 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
         String accessJws = webRequest.getHeader("Authorization");
         String refreshJws = webRequest.getHeader("RefreshToken");
         String jws = "";
-        //refreshToken 검증 및 처리
+        //refreshToken 검증 및 처리"Bearer"+
         if(refreshJws != null && !refreshJws.equals("")){
-           jws = webRequest.getHeader("RefreshToken");
+           jws = refreshJws;
            try{
                Jws<Claims> claims = Jwts.parserBuilder()
                         .setSigningKey(appConfig.getKey())

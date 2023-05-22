@@ -8,7 +8,7 @@ public class PostEditor {
     private String title;
     private String content;
 
-    public PostEditor( String title, String content) {
+    public PostEditor( String content, String title)  {
         this.title = title;
         this.content = content;
     }

@@ -14,7 +14,7 @@
             <label for="keep">로그인정보저장 &nbsp;</label>
             <input type="checkbox" id="keep" v-model="keepLogin" model-value=true/>
             </span>
-            <button class="btn" @click.prevent="login">로그인</button>
+            <button class="btn" @click.prevent="login()">로그인</button>
             <div>
                 <RouterLink style="color:white" to="/signup">
                     <button class="btn mt-2">
@@ -61,7 +61,7 @@ const login = () => {
         }
         const refreshToken = response.data.refreshToken;
         if (keepLogin.value == true) { //
-            Cookies.set('refreshToken', refreshToken, 60*60*24*31);
+            Cookies.set('refreshToken', refreshToken, 60 * 60 * 24 * 31);
             // 31일 동안 유효한 쿠키 설정 // 서버의 token 유효기간보다 1일 길게 설정
         }
         router.replace({name: "home"});

@@ -5,6 +5,7 @@ import com.example.first.entity.User;
 import com.example.first.exception.DuplicateEmail;
 import com.example.first.exception.UserNotFound;
 import com.example.first.repository.MybatisUserRepository;
+import com.example.first.request.DeleteUser;
 import com.example.first.request.UserCreate;
 import com.example.first.request.UserEdit;
 import com.example.first.response.UserResponse;
@@ -28,6 +29,9 @@ public class UserService {
     public User add(UserCreate userCreate) {
         if (!mybatisUserRepository.findByEmail(userCreate.getEmail()).isEmpty()) {
             throw new DuplicateEmail();
+        }
+        if (!mybatisUserRepository.findByName(userCreate.getName()).isEmpty()){
+            throw new DuplicateEmail("중복된 닉네임입니다.");
         }
         User user = User.builder()
                 .name(userCreate.getName())
@@ -53,6 +57,22 @@ public class UserService {
     }
 
     public void edit(UserEdit userEdit) {
-        mybatisUserRepository.update(userEdit);
+        if(!mybatisUserRepository.findByName(userEdit.getName()).isEmpty()
+                && !mybatisUserRepository.findByName(userEdit.getName()).orElseThrow().getId().equals(userEdit.getUserId())){
+           throw new DuplicateEmail("중복된 닉네임입니다.");
+        };
+
+    mybatisUserRepository.update(userEdit);
+
+    }
+
+    public void delete(DeleteUser deleteUser) {
+        User user =mybatisUserRepository.findById(deleteUser.getAuthedUserId()).orElseThrow();
+        log.info("{}",deleteUser.getPassword());
+        log.info("{}",user.getPassword());
+        if(!passwordEncoder.matches(deleteUser.getPassword(), user.getPassword())){
+            throw new DuplicateEmail("이전비밀번호를 확인하세요.");
+        }
+        mybatisUserRepository.delete(user.getId());
     }
 }

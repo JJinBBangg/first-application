@@ -65,17 +65,23 @@ public interface MybatisUserRepository {
             SELECT * FROM MEMBER
             WHERE name = #{name}
             """)
-    Optional<User> findByMame(String name);
+    Optional<User> findByName(String name);
 
     @Update("""
             <script>
             
             UPDATE MEMBER SET
                 name = #{name},
-                content = #{password}
+                password = #{password}
             WHERE ID = #{userId}
             
             </script>
             """)
     void update(UserEdit userEdit);
+
+    @Delete("""
+            DELETE FROM MEMBER
+            WHERE id = #{id}
+            """)
+    void delete(Long id);
 }

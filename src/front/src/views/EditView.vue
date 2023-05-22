@@ -56,6 +56,7 @@ const edit = () => {
 </script>
 
 <template>
+
     <div class="edit-post">
         <div class="section">
             <p class="section-title">제목</p>

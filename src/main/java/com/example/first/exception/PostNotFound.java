@@ -15,4 +15,9 @@ public class PostNotFound extends JJinBBangException {
     public int getStatusCode() {
         return 404;
     }
+
+    @Override
+    public void addValidation(String fieldName, String message) {
+        super.addValidation(fieldName, message);
+    }
 }

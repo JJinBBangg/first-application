@@ -10,9 +10,8 @@ public class DuplicateEmail extends JJinBBangException {
         super(MESSAGE);
     }
 
-    public DuplicateEmail(String fieldName, String message) {
-        super(MESSAGE);
-        addValidation(fieldName, message);
+    public DuplicateEmail(String message) {
+        super(message);
     }
 
 

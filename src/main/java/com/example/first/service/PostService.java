@@ -90,16 +90,22 @@ public class PostService {
 
     public Map<String, Object> getList(int page, String search, String type) {
         List<Post> posts = Optional.of(postRepository.getPostWithFilesAndUserList(page, search, type)).orElseThrow(()->new PostNotFound("게시글이 없습니다."));
-        if(posts.isEmpty()){
-            throw new PostNotFound("게시글이 없습니다.");
+        if (posts.isEmpty()) {
+            PostNotFound exception = new PostNotFound("게시글이 없습니다.");
+            exception.addValidation("posts", "게시글 목록이 비어 있습니다.");
+            throw exception;
         }
         int count = postRepository.getPostWithFilesAndUserListCount(search, type).size();
         List<PostResponse> postList = posts.stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
+
         return Map.of("count", count, "list", postList);
     }
 
+    static class Result<T> {
+        T data;
+    }
     public void edit(Long id, PostEdit postEdit) {
         Post post = postRepository.findById(id).orElseThrow(PostNotFound::new);
 

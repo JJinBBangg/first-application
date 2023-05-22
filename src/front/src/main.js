@@ -49,6 +49,7 @@ axios.interceptors.response.use(
                     .post("api/auth/login/refresh", {}, {
                         headers: {
                             RefreshToken : refreshToken,
+
                         },
                     })
                     .then((response) => {
@@ -62,6 +63,7 @@ axios.interceptors.response.use(
                             Cookies.set('refreshToken', refreshToken, 60*60*24*30);
                         }
                         router.replace({ name: "home" });
+                        return null;
                     })
             } else {
                 store.commit("setToken", "");}
