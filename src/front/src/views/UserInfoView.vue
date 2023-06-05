@@ -155,7 +155,7 @@ const checkNameAvailability = () => {
             }
         });
 };
-const loginFormRef = ref(null);
+
 const editForm = () => {
     const token = Cookies.get('accessToken');
     console.log(loginFormRef.value)
@@ -205,7 +205,7 @@ const deleteForm = () => {
             });
     }
 }
-
+const loginFormRef = ref(null);
 const loginForm = ref(null)
 onMounted(() => {
     loginFormRef.value = loginForm;

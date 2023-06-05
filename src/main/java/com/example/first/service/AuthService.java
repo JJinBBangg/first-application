@@ -3,6 +3,7 @@ package com.example.first.service;
 import com.example.first.entity.User;
 import com.example.first.entity.UserSession;
 import com.example.first.exception.*;
+import com.example.first.repository.JDBCPostRepository;
 import com.example.first.repository.MybatisPostRepository;
 import com.example.first.repository.MybatisSessionRepository;
 import com.example.first.repository.MybatisUserRepository;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
-
     private final MybatisUserRepository userRepository;
     private final MybatisSessionRepository sessionRepository;
     private final MybatisPostRepository postRepository;

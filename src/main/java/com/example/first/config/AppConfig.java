@@ -3,6 +3,7 @@ package com.example.first.config;
 import io.jsonwebtoken.security.Keys;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;

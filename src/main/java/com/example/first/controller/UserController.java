@@ -43,11 +43,10 @@ public class UserController {
                 .name(userEdit.getName())
                 .build());
         }
-    @DeleteMapping("/user")
+    @DeleteMapping("/user/{id}")
     public void delete(@RequestBody DeleteUser deleteUser, UserSession userSession){
         userService.delete(deleteUser.builder()
                 .authedUserId(userSession.getUserId())
-                .password(deleteUser.getPassword())
                 .build());
     }
 }

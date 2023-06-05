@@ -80,6 +80,7 @@ class PostControllerTest {
                 .build();
         String json = objectMapper.writeValueAsString(login);
 
+
         MvcResult result = mockMvc.perform(post("/auth/login")
                         .contentType(APPLICATION_JSON)
                         .content(json)

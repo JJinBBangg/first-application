@@ -180,7 +180,7 @@ class AuthControllerTest {
                 .password("1234")
                 .build();
         String json = objectMapper.writeValueAsString(login);
-
+        //when
         MvcResult result = mockMvc.perform(post("/auth/login")
                         .contentType(APPLICATION_JSON)
                         .content(json)
@@ -191,7 +191,7 @@ class AuthControllerTest {
 
         String accessToken = JsonPath.read(result.getResponse().getContentAsString(), "$.accessToken");
 
-
+        //then
         mockMvc.perform(post("/auth/user/login")
                         .contentType(APPLICATION_JSON)
                         .header("Authorization", accessToken+3)

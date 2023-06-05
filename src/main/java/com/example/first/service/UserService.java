@@ -68,8 +68,6 @@ public class UserService {
 
     public void delete(DeleteUser deleteUser) {
         User user =mybatisUserRepository.findById(deleteUser.getAuthedUserId()).orElseThrow();
-        log.info("{}",deleteUser.getPassword());
-        log.info("{}",user.getPassword());
         if(!passwordEncoder.matches(deleteUser.getPassword(), user.getPassword())){
             throw new DuplicateEmail("이전비밀번호를 확인하세요.");
         }
