@@ -10,7 +10,7 @@
                 <input id="password" type="password" v-model="password"/>
             </div>
 
-            <span class="el-button" style="color: #1a1e21">
+            <span class="el-button mb-2" style="color: #1a1e21">
             <label for="keep">로그인정보저장 &nbsp;</label>
             <input type="checkbox" id="keep" v-model="keepLogin" model-value=true/>
             </span>

@@ -37,6 +37,8 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public UserSession resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+
+
         log.info("AuthResolver 실행");
         String accessJws = webRequest.getHeader("Authorization");
         String refreshJws = webRequest.getHeader("RefreshToken");

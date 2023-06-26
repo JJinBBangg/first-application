@@ -121,9 +121,6 @@ public class AuthController {
         return authedUser;
     }
 
-}
-
-
 //    @PostMapping("/auth/login")
 //    public ResponseEntity<Object> login(@RequestBody Login login, HttpSession session){ // todo HttpServletResponse 활용법 따로 공부하기
 //        UserSession logedinUserSession= authService.signIn(login);
@@ -134,10 +131,14 @@ public class AuthController {
 //                .domain("localhost") //  todo 서버 환경에 따른 분리 필요
 //                .path("/")
 //                .httpOnly(true)
+//
 //                .secure(false)
 //                .maxAge(Duration.ofDays(30))
 //                .sameSite("Strict")
 //                .build();
 //        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
 //    }
+}
+
+
 

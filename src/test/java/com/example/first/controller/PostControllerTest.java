@@ -8,24 +8,24 @@ import com.example.first.repository.MybatisUserRepository;
 import com.example.first.request.Login;
 import com.example.first.request.PostCreate;
 import com.example.first.request.PostEdit;
-import com.example.first.response.PostResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -66,6 +66,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("/posts 요청 Post를 DB에 저장한다.")
+
     void test1() throws Exception {
         User user =User.builder()
                 .name("kook123")
@@ -220,7 +221,7 @@ class PostControllerTest {
                 .password(passwordEncoder.encode("1234"))
                 .build();
         userRepository.save(user);
-        List<Post> requestPosts = IntStream.range(1, 101)
+        List<Post> requestPosts = IntStream.range(1, 151)
                 .mapToObj(i -> Post.builder()
                         .title("제목" + i)
                         .content("내용" + i)
@@ -244,10 +245,10 @@ class PostControllerTest {
                  */
 
                 .andExpect(jsonPath("$.list.length()", Matchers.is(10)))
-                .andExpect(jsonPath("$.list[0].title").value("제목100"))
-                .andExpect(jsonPath("$.list[0].content").value("내용100"))
-                .andExpect(jsonPath("$.list[1].title").value("제목99"))
-                .andExpect(jsonPath("$.list[1].content").value("내용99"))
+                .andExpect(jsonPath("$.list[0].title").value("제목150"))
+                .andExpect(jsonPath("$.list[0].content").value("내용150"))
+                .andExpect(jsonPath("$.list[1].title").value("제목149"))
+                .andExpect(jsonPath("$.list[1].content").value("내용149"))
                 .andDo(MockMvcResultHandlers.print());
 
     }

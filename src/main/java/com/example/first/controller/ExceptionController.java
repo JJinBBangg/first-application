@@ -17,10 +17,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class ExceptionController {
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ErrorResponse MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+    public ResponseEntity<ErrorResponse> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
 //        MethodArgumentNotValidException
 //      log.error("exceptionHandler error : ", e);
 //        FieldError fieldError =  e.getFieldError();
@@ -41,7 +40,8 @@ public class ExceptionController {
 //        }
 
 //            new ErrorResponse("400", "잘못된 요청입니다.");
-        return response;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(response);
     }
 
     @ResponseBody
