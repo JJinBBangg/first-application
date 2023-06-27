@@ -1,4 +1,7 @@
 //package com.example.first.config;
+/**
+ * spring security 사용 시 계정정도 저장
+ */
 //
 //import com.example.first.entity.User;
 //import com.example.first.exception.UserNotFound;

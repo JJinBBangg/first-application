@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.util.Base64;
 
+/**
+ * jwt 토큰 암호화, 복호화 key property 파일에 숨기는기능
+ */
 @Data
 @ConfigurationProperties(prefix = "jtw")
 public class AppConfig {

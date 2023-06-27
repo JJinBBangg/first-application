@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * interceptor 사용하여 accessToken 값 검증
+ */
 
 @Slf4j
 public class Authintercetor implements HandlerInterceptor {

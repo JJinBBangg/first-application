@@ -11,6 +11,9 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
+/**
+ * aws S3버킷 접속 정보 Bean 등록
+ */
 @Configuration
 public class CustomConfiguration{
     @Value("${aws.accessKeyId}")
