@@ -1,14 +1,12 @@
 package com.example.first.service;
 
 import com.example.first.entity.User;
-import com.example.first.entity.UserSession;
+import com.example.first.entity.AuthUser;
 import com.example.first.exception.*;
-import com.example.first.repository.JDBCPostRepository;
 import com.example.first.repository.MybatisPostRepository;
 import com.example.first.repository.MybatisSessionRepository;
 import com.example.first.repository.MybatisUserRepository;
 import com.example.first.request.Login;
-import com.example.first.response.AuthUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,25 +22,25 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     // 로그인 기능
-    public UserSession signIn(Login request) {
+    public AuthUser signIn(Login request) {
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(InvalidSigninInformation::new);
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new InvalidSigninInformation();
         }
-        UserSession userSession = UserSession.builder()
+        AuthUser authUser = AuthUser.builder()
                 .userId(user.getId())
                 .build();
-        sessionRepository.save(userSession);
-        return sessionRepository.findByAccessToken(userSession.getAccessToken()).orElseThrow(UnknownError::new);
+        sessionRepository.save(authUser);
+        return sessionRepository.findByAccessToken(authUser.getAccessToken()).orElseThrow(UnknownError::new);
     }
 
-    public AuthUser authUser(AuthUser authUser) {
+    public com.example.first.response.AuthUser authUser(com.example.first.response.AuthUser authUser) {
         switch (authUser.getService()) {
             case "post":
                 if(authUser.getUserId().equals(authUser.getAuthedUserId())){
-                    return AuthUser.builder()
+                    return com.example.first.response.AuthUser.builder()
                             .authResult(true)
                             .build();
                 }else {
@@ -53,11 +51,11 @@ public class AuthService {
                     throw new Unauthorized("이메일을 입력하세요.");
                 }
                 if (userRepository.findByEmail(authUser.getEmail()).isEmpty()) {
-                    return AuthUser.builder()
+                    return com.example.first.response.AuthUser.builder()
                             .authResult(true)
                             .build();
                 } else {
-                    return AuthUser.builder()
+                    return com.example.first.response.AuthUser.builder()
                             .authResult(false)
                             .build();
                 }
@@ -70,7 +68,7 @@ public class AuthService {
                         && !userRepository.findByName(authUser.getName()).orElseThrow().getEmail().equals(authUser.getEmail())){
                     throw new DuplicateEmail("중복된 닉네임입니다.");
                 }
-                    return AuthUser.builder()
+                    return com.example.first.response.AuthUser.builder()
                             .name(authUser.getName())
                             .authResult(true)
                             .build();
@@ -78,21 +76,21 @@ public class AuthService {
             case "password":
                 User user1 = userRepository.findById(authUser.getAuthedUserId()).orElseThrow(UserNotFound::new);
                 if(passwordEncoder.matches(authUser.getPassword(), user1.getPassword())){
-                    return AuthUser.builder()
+                    return com.example.first.response.AuthUser.builder()
                             .authResult(true)
                             .build();
                 } else {
-                    return AuthUser.builder()
+                    return com.example.first.response.AuthUser.builder()
                             .authResult(false)
                             .build();
                 }
             case "login":
-                return AuthUser.builder()
+                return com.example.first.response.AuthUser.builder()
                     .authResult(true)
                     .build();
             case "auth":
                 User authedUser =userRepository.findById(authUser.getAuthedUserId()).orElseThrow();
-                return AuthUser.builder()
+                return com.example.first.response.AuthUser.builder()
                         .email(authedUser.getEmail())
                         .name(authedUser.getName())
                         .authResult(true)

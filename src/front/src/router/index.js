@@ -55,7 +55,6 @@ const router = createRouter({
       name: 'user',
       component: UserInfoView
     }
-
   ]
 })
 

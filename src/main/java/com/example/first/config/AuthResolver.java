@@ -1,25 +1,18 @@
 package com.example.first.config;
 
 
-import com.example.first.entity.UserSession;
+import com.example.first.entity.AuthUser;
 import com.example.first.exception.Unauthorized;
 import com.example.first.repository.MybatisSessionRepository;
-import com.example.first.response.SessionResponse;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-
-import javax.crypto.SecretKey;
-import java.security.Key;
-import java.util.Base64;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -32,11 +25,11 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
 
-        return parameter.getParameterType().equals(UserSession.class);
+        return parameter.getParameterType().equals(AuthUser.class);
     }
 
     @Override
-    public UserSession resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public AuthUser resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 
 
         log.info("AuthResolver 실행");
@@ -53,7 +46,7 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
                         .build()
                         .parseClaimsJws(jws);
                 String userId = claims.getBody().getSubject();
-                return UserSession.builder()
+                return AuthUser.builder()
                         .userId(Long.valueOf(userId))
                         .build();
            } catch (ExpiredJwtException e){
@@ -72,7 +65,7 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
                 .build()
                 .parseClaimsJws(jws);
         String userId = claims.getBody().getSubject();
-        return UserSession.builder()
+        return AuthUser.builder()
                 .userId(Long.valueOf(userId))
                 .build();
 

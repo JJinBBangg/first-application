@@ -1,19 +1,17 @@
 package com.example.first.controller;
 
 
-import com.example.first.entity.UserSession;
+import com.example.first.entity.AuthUser;
 import com.example.first.request.PostCreate;
 import com.example.first.request.PostDelete;
 import com.example.first.request.PostEdit;
 import com.example.first.response.PostResponse;
 import com.example.first.service.PostService;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -24,12 +22,12 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public void post(@RequestBody @Valid PostCreate request, UserSession userSession) {
+    public void post(@RequestBody @Valid PostCreate request, AuthUser authUser) {
         request.validate();
         postService.write(PostCreate.builder()
                         .title(request.getTitle())
                         .content(request.getContent())
-                        .userId(userSession.getUserId())
+                        .userId(authUser.getUserId())
                 .build());
     }
 
@@ -44,18 +42,18 @@ public class PostController {
     }
 
     @PatchMapping("/posts/{postId}")
-    public void edit(@RequestBody @Valid PostEdit postEdit, @PathVariable Long postId, UserSession userSession) {
+    public void edit(@RequestBody @Valid PostEdit postEdit, @PathVariable Long postId, AuthUser authUser) {
 
         postService.edit(postId, postEdit);
 
     }
 
     @DeleteMapping("/posts/{postId}")
-    public void delete(@PathVariable Long postId, UserSession userSession) {
+    public void delete(@PathVariable Long postId, AuthUser authUser) {
 
         postService.delete(PostDelete.builder()
                 .postId(postId)
-                .userId(userSession.getUserId())
+                .userId(authUser.getUserId())
                 .build());
     }
 }

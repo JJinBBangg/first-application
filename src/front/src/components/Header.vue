@@ -40,26 +40,20 @@ const logout = function () {
             </RouterLink>
 
             <el-menu-item v-else @click="logout()" index="3">로그아웃
-                <el-sub-menu index="5" @click.stop="">
-                    <template #title>개인정보수정</template>
-                    <RouterLink to="/user"><el-menu-item index="4-1">회원정보수정</el-menu-item></RouterLink>
-                    <el-menu-item index="4-2">1:1 문의</el-menu-item>
-                    <el-menu-item index="4-3">*********</el-menu-item>
-                </el-sub-menu>
             </el-menu-item>
 
 
             <el-sub-menu index="4">
                 <template #title>더보기</template>
-                <el-menu-item index="4-1">item one</el-menu-item>
-                <el-menu-item index="4-2">item two</el-menu-item>
-                <el-menu-item index="4-3">item three</el-menu-item>
-                <el-sub-menu index="4-4">
-                    <template #title>item four</template>
-                    <el-menu-item index="4-4-1">item one</el-menu-item>
-                    <el-menu-item index="4-4-2">item two</el-menu-item>
-                    <el-menu-item index="4-4-3">item three</el-menu-item>
-                </el-sub-menu>
+
+                <el-menu-item index="4-1">1:1 문의</el-menu-item>
+                <RouterLink to="/user"><el-menu-item index="4-3">회원정보수정</el-menu-item></RouterLink>
+<!--                <el-sub-menu index="4-4">-->
+<!--                    <template #title>item four</template>-->
+<!--                    <el-menu-item index="4-4-1">item one</el-menu-item>-->
+<!--                    <el-menu-item index="4-4-2">item two</el-menu-item>-->
+<!--                    <el-menu-item index="4-4-3">item three</el-menu-item>-->
+<!--                </el-sub-menu>-->
             </el-sub-menu>
         </el-menu>
     </el-header>

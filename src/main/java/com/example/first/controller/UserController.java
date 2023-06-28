@@ -1,9 +1,8 @@
 package com.example.first.controller;
 
 import com.example.first.entity.User;
-import com.example.first.entity.UserSession;
+import com.example.first.entity.AuthUser;
 import com.example.first.request.DeleteUser;
-import com.example.first.request.PostEdit;
 import com.example.first.request.UserCreate;
 import com.example.first.request.UserEdit;
 import com.example.first.response.UserResponse;
@@ -36,17 +35,17 @@ public class UserController {
         return userService.get(id);
     }
     @PatchMapping("/user")
-    public void edit(@RequestBody @Valid UserEdit userEdit, UserSession userSession) {
+    public void edit(@RequestBody @Valid UserEdit userEdit, AuthUser authUser) {
         userService.edit(UserEdit.builder()
-                .userId(userSession.getUserId())
+                .userId(authUser.getUserId())
                 .password(userEdit.getPassword())
                 .name(userEdit.getName())
                 .build());
         }
     @DeleteMapping("/user/{id}")
-    public void delete(@RequestBody DeleteUser deleteUser, UserSession userSession){
+    public void delete(@RequestBody DeleteUser deleteUser, AuthUser authUser){
         userService.delete(deleteUser.builder()
-                .authedUserId(userSession.getUserId())
+                .authedUserId(authUser.getUserId())
                 .build());
     }
 }

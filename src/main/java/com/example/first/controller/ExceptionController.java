@@ -20,6 +20,32 @@ public class ExceptionController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ResponseEntity<ErrorResponse> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code("400")
+                .message(e.getFieldErrors().get(0).getDefaultMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(JJinBBangException.class)
+    public ResponseEntity<ErrorResponse> JJinBBangExceptionHandler(JJinBBangException e) {
+
+        int statusCode = e.getStatusCode();
+        ErrorResponse response = ErrorResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode)
+                .body(response);
+    }
+}
+
 //        MethodArgumentNotValidException
 //      log.error("exceptionHandler error : ", e);
 //        FieldError fieldError =  e.getFieldError();
@@ -27,11 +53,6 @@ public class ExceptionController {
 //        String message = fieldError.getDefaultMessage();
 //        Map<String, String>  response =new HashMap<>();
 //        response.put(field, message);
-        ErrorResponse response = ErrorResponse.builder()
-                .code("400")
-                .message(e.getFieldErrors().get(0).getDefaultMessage())
-                .build();
-        log.info(">>>>>>{}",e.getFieldErrors().get(0).getDefaultMessage());
 //        log.info(">>>>>>{}",fieldError.getField());
 //        log.info(">>>>>>{}",fieldError.getDefaultMessage());
 //        for (FieldError fieldError : e.getFieldErrors()) {
@@ -40,31 +61,16 @@ public class ExceptionController {
 //        }
 
 //            new ErrorResponse("400", "잘못된 요청입니다.");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(response);
-    }
 
-    @ResponseBody
-    @ExceptionHandler(JJinBBangException.class)
-    public ResponseEntity<ErrorResponse> JJinBBangExceptionHandler(JJinBBangException e) {
+
+
+
 //        if(e instanceof InvalidRequest){
 //            //400
 //        } else if(e instanceof PostNotFound) {
 //            //404
 //        }
-        int statusCode = e.getStatusCode();
-        ErrorResponse response = ErrorResponse.builder()
-                .code(String.valueOf(statusCode))
-                .message(e.getMessage())
-                .validation(e.getValidation())
-                .build();
 //        if(e instanceof InvalidRequest){
 //            InvalidRequest invalidRequest = (InvalidRequest) e;
 //            response.addValidation(invalidRequest.getFieldName(),invalidRequest.getMessage());
 //        }
-
-        return ResponseEntity.status(statusCode)
-                .body(response);
-    }
-
-}

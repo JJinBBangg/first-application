@@ -77,12 +77,30 @@ onMounted(() => {
 </script>
 
 <template>
+    <div class="container">
     <h2>제목 : {{ post.title }}</h2>
-    <p>내용 : {{ post.content }}</p>
+    <el-input readonly v-model="post.content" />
     <p>작성일 : {{ post.dateTime }}</p>
     <p>조회수 : {{ post.hit }}</p>
     <p>작성자 : {{ post.name }}</p>
+    </div>
     <el-button type="warning" @click="moveToEdit()">수정</el-button>
     <el-button type="danger" @click="deletePost()">삭제</el-button>
     <el-button type="info" @click="$router.go(-1)" >이전</el-button>
+
 </template>
+
+<style>
+.container{
+
+}
+
+</style>
+
+
+
+
+
+
+
+

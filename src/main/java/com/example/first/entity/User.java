@@ -19,7 +19,7 @@ public class User {
     private String password;
     private LocalDateTime dateTime;
 
-    private List<UserSession> sessionList = new ArrayList<>();
+    private List<AuthUser> sessionList = new ArrayList<>();
 
     @Builder
     public User(String name, String email, String password) {

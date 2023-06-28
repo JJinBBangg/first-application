@@ -29,6 +29,7 @@ import Footer from "@/components/Footer.vue";
 }
 
 .content-container {
+    display: flex;
     margin-top: 80px; /* Adjust this value as needed for spacing below the header */
 }
 

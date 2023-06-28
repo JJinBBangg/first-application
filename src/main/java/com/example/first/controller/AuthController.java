@@ -1,9 +1,8 @@
 package com.example.first.controller;
 
 import com.example.first.config.AppConfig;
-import com.example.first.entity.UserSession;
+import com.example.first.entity.AuthUser;
 import com.example.first.request.Login;
-import com.example.first.response.AuthUser;
 import com.example.first.response.SessionResponse;
 import com.example.first.service.AuthService;
 import io.jsonwebtoken.Jwts;
@@ -31,17 +30,17 @@ public class AuthController {
 
     @PostMapping("/auth/login")
     public SessionResponse login(@RequestBody Login login) {
-        UserSession logedinUserSession = authService.signIn(login);
+        AuthUser logedinAuthUser = authService.signIn(login);
 
         String jws = Jwts.builder()
-                .setSubject(String.valueOf(logedinUserSession.getUserId()))
+                .setSubject(String.valueOf(logedinAuthUser.getUserId()))
                 .signWith(appConfig.getKey())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + (30 * 60 * 1000L))) // 30분
                 .compact();
 
         String refreshJws = Jwts.builder()
-                .setSubject(String.valueOf(logedinUserSession.getUserId()))
+                .setSubject(String.valueOf(logedinAuthUser.getUserId()))
                 .signWith(appConfig.getKey())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + (30L * 24L * 60L * 60L * 1000L))) // 30일
@@ -54,17 +53,17 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login/refresh")
-    public SessionResponse refresh(UserSession userSession) {
+    public SessionResponse refresh(AuthUser authUser) {
 
         String jws = Jwts.builder()
-                .setSubject(String.valueOf(userSession.getUserId()))
+                .setSubject(String.valueOf(authUser.getUserId()))
                 .signWith(appConfig.getKey())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + (1800L * 1000L))) // 30분
                 .compact();
 
         String refreshJws = Jwts.builder()
-                .setSubject(String.valueOf(userSession.getUserId()))
+                .setSubject(String.valueOf(authUser.getUserId()))
                 .signWith(appConfig.getKey())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + (30L * 24L * 60L * 60L * 1000L))) // 30일
@@ -96,9 +95,9 @@ public class AuthController {
     }
 
     @PostMapping("/auth/user/{service}")
-    public AuthUser authUser(@RequestBody AuthUser authUser, @PathVariable String service, UserSession userSession) {
+    public com.example.first.response.AuthUser authUser(@RequestBody com.example.first.response.AuthUser authUser, @PathVariable String service, AuthUser userSession) {
         log.info(">>>auth/user/ {}", service);
-        AuthUser authedUser = authService.authUser(AuthUser.builder()
+        com.example.first.response.AuthUser authedUser = authService.authUser(com.example.first.response.AuthUser.builder()
                 .email(authUser.getEmail())
                 .postId(authUser.getPostId())
                 .userId(authUser.getUserId())
@@ -111,9 +110,9 @@ public class AuthController {
     }
 
     @PostMapping("/auth/signup/{service}")
-    public AuthUser authUser(@RequestBody AuthUser authUser, @PathVariable String service) {
+    public com.example.first.response.AuthUser authUser(@RequestBody com.example.first.response.AuthUser authUser, @PathVariable String service) {
         log.info("auth/signup/ {}", service);
-        AuthUser authedUser = authService.authUser(AuthUser.builder()
+        com.example.first.response.AuthUser authedUser = authService.authUser(com.example.first.response.AuthUser.builder()
                 .email(authUser.getEmail())
                 .name(authUser.getName())
                 .service(service)
