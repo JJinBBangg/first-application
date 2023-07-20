@@ -1,7 +1,7 @@
 package com.example.first.controller;
 
 import com.example.first.entity.User;
-import com.example.first.entity.AuthUser;
+import com.example.first.entity.UserSession;
 import com.example.first.request.DeleteUser;
 import com.example.first.request.UserCreate;
 import com.example.first.request.UserEdit;
@@ -35,17 +35,17 @@ public class UserController {
         return userService.get(id);
     }
     @PatchMapping("/user")
-    public void edit(@RequestBody @Valid UserEdit userEdit, AuthUser authUser) {
+    public void edit(@RequestBody @Valid UserEdit userEdit, UserSession userSession) {
         userService.edit(UserEdit.builder()
-                .userId(authUser.getUserId())
+                .userId(userSession.getUserId())
                 .password(userEdit.getPassword())
                 .name(userEdit.getName())
                 .build());
         }
     @DeleteMapping("/user/{id}")
-    public void delete(@RequestBody DeleteUser deleteUser, AuthUser authUser){
+    public void delete(@RequestBody DeleteUser deleteUser, UserSession userSession){
         userService.delete(deleteUser.builder()
-                .authedUserId(authUser.getUserId())
+                .authedUserId(userSession.getUserId())
                 .build());
     }
 }

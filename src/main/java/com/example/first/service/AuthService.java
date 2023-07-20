@@ -1,7 +1,7 @@
 package com.example.first.service;
 
 import com.example.first.entity.User;
-import com.example.first.entity.AuthUser;
+import com.example.first.entity.UserSession;
 import com.example.first.exception.*;
 import com.example.first.repository.MybatisPostRepository;
 import com.example.first.repository.MybatisSessionRepository;
@@ -22,18 +22,18 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     // 로그인 기능
-    public AuthUser signIn(Login request) {
+    public UserSession signIn(Login request) {
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(InvalidSigninInformation::new);
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new InvalidSigninInformation();
         }
-        AuthUser authUser = AuthUser.builder()
+        UserSession userSession = UserSession.builder()
                 .userId(user.getId())
                 .build();
-        sessionRepository.save(authUser);
-        return sessionRepository.findByAccessToken(authUser.getAccessToken()).orElseThrow(UnknownError::new);
+        sessionRepository.save(userSession);
+        return sessionRepository.findByAccessToken(userSession.getAccessToken()).orElseThrow(UnknownError::new);
     }
 
     public com.example.first.response.AuthUser authUser(com.example.first.response.AuthUser authUser) {

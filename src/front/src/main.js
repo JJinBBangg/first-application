@@ -9,11 +9,15 @@ import 'element-plus/dist/index.css'
 import ElementPlus from 'element-plus'
 import "bootstrap/dist/css//bootstrap-utilities.css"
 import './assets/main.css'
+import { PrismEditor } from 'vue-prism-editor';
+import 'vue-prism-editor/dist/prismeditor.min.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(ElementPlus)
+app.component('PrismEditor', PrismEditor);
 app.mount('#app')
 
 

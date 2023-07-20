@@ -26,3 +26,1025 @@ Cookie: SESSION=1c1e1e2c-7fb2-419e-941d-1ca085a0ec44
 GET http://localhost:8085/test
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzYiLCJpYXQiOjE2ODM2MjM4MTQsImV4cCI6MTY4MzYyNDQxNH0.igQFUDco8VQV7WCLYoAcnYi_4eKNBJrM3usDYgMrprs
+
+### 지역별 데이터 초기화
+POST http://localhost:8085/region
+Content-Type: application/json
+
+### 날씨 api요청
+GET http://localhost:8085/weather?region=마포구
+Content-Type: application/json
+
+### 날씨 api요청 db 저장 로직
+GET http://localhost:8085/test/weather
+Content-Type: application/json
+
+{
+  "items": {
+    "item": [
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "TMP",
+        "fcstDate": "20230705",
+        "fcstTime": "1500",
+        "fcstValue": "31",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "UUU",
+        "fcstDate": "20230705",
+        "fcstTime": "1500",
+        "fcstValue": "2.8",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VVV",
+        "fcstDate": "20230705",
+        "fcstTime": "1500",
+        "fcstValue": "-0.5",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VEC",
+        "fcstDate": "20230705",
+        "fcstTime": "1500",
+        "fcstValue": "279",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WSD",
+        "fcstDate": "20230705",
+        "fcstTime": "1500",
+        "fcstValue": "2.8",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SKY",
+        "fcstDate": "20230705",
+        "fcstTime": "1500",
+        "fcstValue": "1",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PTY",
+        "fcstDate": "20230705",
+        "fcstTime": "1500",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "POP",
+        "fcstDate": "20230705",
+        "fcstTime": "1500",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WAV",
+        "fcstDate": "20230705",
+        "fcstTime": "1500",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PCP",
+        "fcstDate": "20230705",
+        "fcstTime": "1500",
+        "fcstValue": "강수없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "REH",
+        "fcstDate": "20230705",
+        "fcstTime": "1500",
+        "fcstValue": "67",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SNO",
+        "fcstDate": "20230705",
+        "fcstTime": "1500",
+        "fcstValue": "적설없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "TMP",
+        "fcstDate": "20230705",
+        "fcstTime": "1600",
+        "fcstValue": "31",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "UUU",
+        "fcstDate": "20230705",
+        "fcstTime": "1600",
+        "fcstValue": "3",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VVV",
+        "fcstDate": "20230705",
+        "fcstTime": "1600",
+        "fcstValue": "-0.5",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VEC",
+        "fcstDate": "20230705",
+        "fcstTime": "1600",
+        "fcstValue": "279",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WSD",
+        "fcstDate": "20230705",
+        "fcstTime": "1600",
+        "fcstValue": "3",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SKY",
+        "fcstDate": "20230705",
+        "fcstTime": "1600",
+        "fcstValue": "1",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PTY",
+        "fcstDate": "20230705",
+        "fcstTime": "1600",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "POP",
+        "fcstDate": "20230705",
+        "fcstTime": "1600",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WAV",
+        "fcstDate": "20230705",
+        "fcstTime": "1600",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PCP",
+        "fcstDate": "20230705",
+        "fcstTime": "1600",
+        "fcstValue": "강수없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "REH",
+        "fcstDate": "20230705",
+        "fcstTime": "1600",
+        "fcstValue": "63",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SNO",
+        "fcstDate": "20230705",
+        "fcstTime": "1600",
+        "fcstValue": "적설없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "TMP",
+        "fcstDate": "20230705",
+        "fcstTime": "1700",
+        "fcstValue": "31",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "UUU",
+        "fcstDate": "20230705",
+        "fcstTime": "1700",
+        "fcstValue": "3.5",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VVV",
+        "fcstDate": "20230705",
+        "fcstTime": "1700",
+        "fcstValue": "-0.4",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VEC",
+        "fcstDate": "20230705",
+        "fcstTime": "1700",
+        "fcstValue": "277",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WSD",
+        "fcstDate": "20230705",
+        "fcstTime": "1700",
+        "fcstValue": "3.5",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SKY",
+        "fcstDate": "20230705",
+        "fcstTime": "1700",
+        "fcstValue": "1",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PTY",
+        "fcstDate": "20230705",
+        "fcstTime": "1700",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "POP",
+        "fcstDate": "20230705",
+        "fcstTime": "1700",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WAV",
+        "fcstDate": "20230705",
+        "fcstTime": "1700",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PCP",
+        "fcstDate": "20230705",
+        "fcstTime": "1700",
+        "fcstValue": "강수없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "REH",
+        "fcstDate": "20230705",
+        "fcstTime": "1700",
+        "fcstValue": "61",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SNO",
+        "fcstDate": "20230705",
+        "fcstTime": "1700",
+        "fcstValue": "적설없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "TMP",
+        "fcstDate": "20230705",
+        "fcstTime": "1800",
+        "fcstValue": "30",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "UUU",
+        "fcstDate": "20230705",
+        "fcstTime": "1800",
+        "fcstValue": "3.5",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VVV",
+        "fcstDate": "20230705",
+        "fcstTime": "1800",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VEC",
+        "fcstDate": "20230705",
+        "fcstTime": "1800",
+        "fcstValue": "270",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WSD",
+        "fcstDate": "20230705",
+        "fcstTime": "1800",
+        "fcstValue": "3.5",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SKY",
+        "fcstDate": "20230705",
+        "fcstTime": "1800",
+        "fcstValue": "1",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PTY",
+        "fcstDate": "20230705",
+        "fcstTime": "1800",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "POP",
+        "fcstDate": "20230705",
+        "fcstTime": "1800",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WAV",
+        "fcstDate": "20230705",
+        "fcstTime": "1800",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PCP",
+        "fcstDate": "20230705",
+        "fcstTime": "1800",
+        "fcstValue": "강수없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "REH",
+        "fcstDate": "20230705",
+        "fcstTime": "1800",
+        "fcstValue": "66",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SNO",
+        "fcstDate": "20230705",
+        "fcstTime": "1800",
+        "fcstValue": "적설없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "TMP",
+        "fcstDate": "20230705",
+        "fcstTime": "1900",
+        "fcstValue": "28",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "UUU",
+        "fcstDate": "20230705",
+        "fcstTime": "1900",
+        "fcstValue": "4",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VVV",
+        "fcstDate": "20230705",
+        "fcstTime": "1900",
+        "fcstValue": "0.7",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VEC",
+        "fcstDate": "20230705",
+        "fcstTime": "1900",
+        "fcstValue": "260",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WSD",
+        "fcstDate": "20230705",
+        "fcstTime": "1900",
+        "fcstValue": "4",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SKY",
+        "fcstDate": "20230705",
+        "fcstTime": "1900",
+        "fcstValue": "1",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PTY",
+        "fcstDate": "20230705",
+        "fcstTime": "1900",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "POP",
+        "fcstDate": "20230705",
+        "fcstTime": "1900",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WAV",
+        "fcstDate": "20230705",
+        "fcstTime": "1900",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PCP",
+        "fcstDate": "20230705",
+        "fcstTime": "1900",
+        "fcstValue": "강수없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "REH",
+        "fcstDate": "20230705",
+        "fcstTime": "1900",
+        "fcstValue": "73",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SNO",
+        "fcstDate": "20230705",
+        "fcstTime": "1900",
+        "fcstValue": "적설없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "TMP",
+        "fcstDate": "20230705",
+        "fcstTime": "2000",
+        "fcstValue": "27",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "UUU",
+        "fcstDate": "20230705",
+        "fcstTime": "2000",
+        "fcstValue": "3.8",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VVV",
+        "fcstDate": "20230705",
+        "fcstTime": "2000",
+        "fcstValue": "0.7",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VEC",
+        "fcstDate": "20230705",
+        "fcstTime": "2000",
+        "fcstValue": "260",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WSD",
+        "fcstDate": "20230705",
+        "fcstTime": "2000",
+        "fcstValue": "3.9",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SKY",
+        "fcstDate": "20230705",
+        "fcstTime": "2000",
+        "fcstValue": "1",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PTY",
+        "fcstDate": "20230705",
+        "fcstTime": "2000",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "POP",
+        "fcstDate": "20230705",
+        "fcstTime": "2000",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WAV",
+        "fcstDate": "20230705",
+        "fcstTime": "2000",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PCP",
+        "fcstDate": "20230705",
+        "fcstTime": "2000",
+        "fcstValue": "강수없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "REH",
+        "fcstDate": "20230705",
+        "fcstTime": "2000",
+        "fcstValue": "74",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SNO",
+        "fcstDate": "20230705",
+        "fcstTime": "2000",
+        "fcstValue": "적설없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "TMP",
+        "fcstDate": "20230705",
+        "fcstTime": "2100",
+        "fcstValue": "25",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "UUU",
+        "fcstDate": "20230705",
+        "fcstTime": "2100",
+        "fcstValue": "3",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VVV",
+        "fcstDate": "20230705",
+        "fcstTime": "2100",
+        "fcstValue": "0.5",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VEC",
+        "fcstDate": "20230705",
+        "fcstTime": "2100",
+        "fcstValue": "261",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WSD",
+        "fcstDate": "20230705",
+        "fcstTime": "2100",
+        "fcstValue": "3.1",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SKY",
+        "fcstDate": "20230705",
+        "fcstTime": "2100",
+        "fcstValue": "1",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PTY",
+        "fcstDate": "20230705",
+        "fcstTime": "2100",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "POP",
+        "fcstDate": "20230705",
+        "fcstTime": "2100",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WAV",
+        "fcstDate": "20230705",
+        "fcstTime": "2100",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PCP",
+        "fcstDate": "20230705",
+        "fcstTime": "2100",
+        "fcstValue": "강수없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "REH",
+        "fcstDate": "20230705",
+        "fcstTime": "2100",
+        "fcstValue": "78",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SNO",
+        "fcstDate": "20230705",
+        "fcstTime": "2100",
+        "fcstValue": "적설없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "TMP",
+        "fcstDate": "20230705",
+        "fcstTime": "2200",
+        "fcstValue": "24",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "UUU",
+        "fcstDate": "20230705",
+        "fcstTime": "2200",
+        "fcstValue": "2.4",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VVV",
+        "fcstDate": "20230705",
+        "fcstTime": "2200",
+        "fcstValue": "0.6",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VEC",
+        "fcstDate": "20230705",
+        "fcstTime": "2200",
+        "fcstValue": "256",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WSD",
+        "fcstDate": "20230705",
+        "fcstTime": "2200",
+        "fcstValue": "2.5",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SKY",
+        "fcstDate": "20230705",
+        "fcstTime": "2200",
+        "fcstValue": "1",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PTY",
+        "fcstDate": "20230705",
+        "fcstTime": "2200",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "POP",
+        "fcstDate": "20230705",
+        "fcstTime": "2200",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "WAV",
+        "fcstDate": "20230705",
+        "fcstTime": "2200",
+        "fcstValue": "0",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "PCP",
+        "fcstDate": "20230705",
+        "fcstTime": "2200",
+        "fcstValue": "강수없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "REH",
+        "fcstDate": "20230705",
+        "fcstTime": "2200",
+        "fcstValue": "84",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "SNO",
+        "fcstDate": "20230705",
+        "fcstTime": "2200",
+        "fcstValue": "적설없음",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "TMP",
+        "fcstDate": "20230705",
+        "fcstTime": "2300",
+        "fcstValue": "23",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "UUU",
+        "fcstDate": "20230705",
+        "fcstTime": "2300",
+        "fcstValue": "2",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VVV",
+        "fcstDate": "20230705",
+        "fcstTime": "2300",
+        "fcstValue": "0.7",
+        "nx": 81,
+        "ny": 75
+      },
+      {
+        "baseDate": "20230705",
+        "baseTime": "1400",
+        "category": "VEC",
+        "fcstDate": "20230705",
+        "fcstTime": "2300",
+        "fcstValue": "252",
+        "nx": 81,
+        "ny": 75
+      }
+    ]
+  },
+  "pageNo": 1,
+  "numOfRows": 100,
+  "totalCount": 700
+}

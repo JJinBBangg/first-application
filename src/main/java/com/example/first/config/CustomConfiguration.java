@@ -21,6 +21,8 @@ public class CustomConfiguration{
 
     @Value("${aws.secretAccessKey}")
     private String secretKey;
+
+    @Value("${}")
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

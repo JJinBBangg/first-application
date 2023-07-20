@@ -8,6 +8,7 @@ import com.example.first.repository.MybatisUserRepository;
 import com.example.first.request.DeleteUser;
 import com.example.first.request.UserCreate;
 import com.example.first.request.UserEdit;
+import com.example.first.response.AuthUser;
 import com.example.first.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,5 +73,19 @@ public class UserService {
             throw new DuplicateEmail("이전비밀번호를 확인하세요.");
         }
         mybatisUserRepository.delete(user.getId());
+    }
+
+    public AuthUser kakaoEmailCheck(KakaoLoginService.KakaoAccount kakaoAccount) {
+        if (mybatisUserRepository.findByEmail(kakaoAccount.getEmail()).isEmpty()) {
+            //없으면 가입 시키고 true 반환
+            mybatisUserRepository.save(User.builder()
+                    .email(kakaoAccount.getEmail())
+                    .build());
+            User user = mybatisUserRepository.findByEmail(kakaoAccount.getEmail()).orElseThrow(UserNotFound::new);
+            return AuthUser.builder().userId(user.getId()).build();
+        }
+        //있으면 true 반환
+        User user = mybatisUserRepository.findByEmail(kakaoAccount.getEmail()).orElseThrow();
+        return AuthUser.builder().userId(user.getId()).build();
     }
 }

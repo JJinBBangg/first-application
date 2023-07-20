@@ -9,13 +9,13 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AuthUser {
+public class UserSession {
     private Long id;
     private String accessToken;
     private Long userId;
 
     @Builder
-    public AuthUser(Long userId){
+    public UserSession(Long userId){
         this.accessToken = UUID.randomUUID().toString();
         this.userId = userId;
 ;

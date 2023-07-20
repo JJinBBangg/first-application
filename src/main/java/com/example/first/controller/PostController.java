@@ -1,7 +1,7 @@
 package com.example.first.controller;
 
 
-import com.example.first.entity.AuthUser;
+import com.example.first.entity.UserSession;
 import com.example.first.request.PostCreate;
 import com.example.first.request.PostDelete;
 import com.example.first.request.PostEdit;
@@ -22,12 +22,12 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public void post(@RequestBody @Valid PostCreate request, AuthUser authUser) {
+    public void post(@RequestBody @Valid PostCreate request, UserSession userSession) {
         request.validate();
         postService.write(PostCreate.builder()
                         .title(request.getTitle())
                         .content(request.getContent())
-                        .userId(authUser.getUserId())
+                        .userId(userSession.getUserId())
                 .build());
     }
 
@@ -42,18 +42,18 @@ public class PostController {
     }
 
     @PatchMapping("/posts/{postId}")
-    public void edit(@RequestBody @Valid PostEdit postEdit, @PathVariable Long postId, AuthUser authUser) {
+    public void edit(@RequestBody @Valid PostEdit postEdit, @PathVariable Long postId, UserSession userSession) {
 
         postService.edit(postId, postEdit);
 
     }
 
     @DeleteMapping("/posts/{postId}")
-    public void delete(@PathVariable Long postId, AuthUser authUser) {
+    public void delete(@PathVariable Long postId, UserSession userSession) {
 
         postService.delete(PostDelete.builder()
                 .postId(postId)
-                .userId(authUser.getUserId())
+                .userId(userSession.getUserId())
                 .build());
     }
 }

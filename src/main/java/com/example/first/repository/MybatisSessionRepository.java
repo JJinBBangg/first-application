@@ -1,6 +1,6 @@
 package com.example.first.repository;
 
-import com.example.first.entity.AuthUser;
+import com.example.first.entity.UserSession;
 import org.apache.ibatis.annotations.*;
 
 import java.util.Optional;
@@ -12,7 +12,7 @@ public interface MybatisSessionRepository {
             VALUES( #{accessToken} , #{userId} )
             """)
     @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
-    void save(AuthUser session);
+    void save(UserSession session);
 
     @Select("""
             SELECT COUNT(id) FROM USERSESSION
@@ -28,5 +28,5 @@ public interface MybatisSessionRepository {
             SELECT * FROM USERSESSION
             WHERE accessToken LIKE #{accessToken}
             """)
-    Optional<AuthUser> findByAccessToken(String accessToken);
+    Optional<UserSession> findByAccessToken(String accessToken);
 }
