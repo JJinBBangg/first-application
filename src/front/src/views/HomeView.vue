@@ -6,17 +6,17 @@
                     v-if="editor"
             >
                 <menu-bar
-                    class="editor__header"
-                    :editor="editor"
+                        class="editor__header"
+                        :editor="editor"
                 />
                 <editor-content
-                    class="editor__content"
-                    :editor="editor"
+                        class="editor__content"
+                        :editor="editor"
                 />
             </div>
         </div>
     </div>
-    <el-button @click="json">입력</el-button>
+    <el-button @click="html">입력</el-button>
 </template>
 
 <script setup>
@@ -31,11 +31,13 @@ import {StarterKit} from "@tiptap/starter-kit";
 import {Editor, EditorContent} from "@tiptap/vue-3";
 import MenuBar from "@/components/MenuBar.vue";
 import {onMounted, ref} from "vue";
+import axios from "axios";
+import Cookies from "vue-cookies";
 
-const provider= ref(null)
-const editor= ref(null)
-const status= ref('connecting')
-const content= ref("HI");
+const provider = ref(null)
+const editor = ref(null)
+const status = ref('connecting')
+const content = ref("HI");
 
 onMounted(() => {
     editor.value = new Editor({
@@ -54,150 +56,165 @@ onMounted(() => {
         content: "HI",
     });
 });
-const json = () => {
-    console.log(editor.value.getHTML())
+const title = ref("");
+const html = () => {
+    const token = Cookies.get('accessToken');
+    axios.post("/api/posts", {
+        title: title.value,
+        content: editor.value.getHTML(),
+    }, {
+        headers: {
+            Authorization: token
+        }
+
+    }).then((response) => {
+
+    }).catch((error) => {
+
+    })
 }
 
 
 </script>
 <style lang="scss">
 .editor {
-    background-color: #C4FFDF;
-    border: 3px solid #0D0D0D;
-    border-radius: 0.75rem;
-    color: #0D0D0D;
+  background-color: #C4FFDF;
+  border: 3px solid #0D0D0D;
+  border-radius: 0.75rem;
+  color: #0D0D0D;
+  display: flex;
+  flex-direction: column;
+  max-height: 26rem;
+
+
+  &__header {
+    align-items: center;
+    background: #143E1C;
+    border-bottom: 3px solid #143E1C;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
     display: flex;
-    flex-direction: column;
-    max-height: 26rem;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    padding: 0.25rem;
+  }
 
+  &__content {
+    flex: 1 1 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 1.25rem 1rem;
+    -webkit-overflow-scrolling: touch;
 
-    &__header {
-        align-items: center;
-        background: #143E1C;
-        border-bottom: 3px solid #143E1C;
-        border-top-left-radius: 0.25rem;
-        border-top-right-radius: 0.25rem;
-        display: flex;
-        flex: 0 0 auto;
-        flex-wrap: wrap;
-        padding: 0.25rem;
+    /* 스크롤바 스타일 지정 */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(13, 13, 13, 0.6) transparent;
+
+    &::-webkit-scrollbar {
+      width: 8px;
     }
 
-    &__content {
-        flex: 1 1 auto;
-        overflow-x: hidden;
-        overflow-y: auto;
-        padding: 1.25rem 1rem;
-        -webkit-overflow-scrolling: touch;
-
-        /* 스크롤바 스타일 지정 */
-        scrollbar-width: thin;
-        scrollbar-color: rgba(13, 13, 13, 0.6) transparent;
-
-        &::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        &::-webkit-scrollbar-track {
-            background-color: transparent;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background-color: rgba(13, 13, 13, 0.6);
-            border-radius: 4px;
-        }
-
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
     }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(13, 13, 13, 0.6);
+      border-radius: 4px;
+    }
+
+  }
 
 
 }
 
 /* Basic editor styles */
 .ProseMirror {
-    > * + * {
-        margin-top: 0.75em;
-    }
-    &:focus {
-        outline: none;
-    }
+  > * + * {
+    margin-top: 0.75em;
+  }
 
-    ul,
-    ol {
-        padding: 0 1rem;
-    }
+  &:focus {
+    outline: none;
+  }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        line-height: 1.1;
-    }
+  ul,
+  ol {
+    padding: 0 1rem;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.1;
+  }
+
+  code {
+    background-color: rgba(#616161, 0.1);
+    color: #616161;
+  }
+
+  pre {
+    background: #0D0D0D;
+    border-radius: 0.5rem;
+    color: #FFF;
+    font-family: 'JetBrainsMono', monospace;
+    padding: 0.75rem 1rem;
 
     code {
-        background-color: rgba(#616161, 0.1);
-        color: #616161;
+      background: none;
+      color: inherit;
+      font-size: 0.8rem;
+      padding: 0;
     }
+  }
 
-    pre {
-        background: #0D0D0D;
-        border-radius: 0.5rem;
-        color: #FFF;
-        font-family: 'JetBrainsMono', monospace;
-        padding: 0.75rem 1rem;
+  mark {
+    background-color: #FAF594;
+  }
 
-        code {
-            background: none;
-            color: inherit;
-            font-size: 0.8rem;
-            padding: 0;
-        }
+  img {
+    height: auto;
+    max-width: 100%;
+  }
+
+  hr {
+    margin: 1rem 0;
+  }
+
+  blockquote {
+    border-left: 2px solid rgba(#0D0D0D, 0.1);
+    padding-left: 1rem;
+  }
+
+  hr {
+    border: none;
+    border-top: 2px solid rgba(#0D0D0D, 0.1);
+    margin: 2rem 0;
+  }
+
+  ul[data-type="taskList"] {
+    list-style: none;
+    padding: 0;
+
+    li {
+      align-items: center;
+      display: flex;
+
+      > label {
+        flex: 0 0 auto;
+        margin-right: 0.5rem;
+        user-select: none;
+      }
+
+      > div {
+        flex: 1 1 auto;
+      }
     }
-
-    mark {
-        background-color: #FAF594;
-    }
-
-    img {
-        height: auto;
-        max-width: 100%;
-    }
-
-    hr {
-        margin: 1rem 0;
-    }
-
-    blockquote {
-        border-left: 2px solid rgba(#0D0D0D, 0.1);
-        padding-left: 1rem;
-    }
-
-    hr {
-        border: none;
-        border-top: 2px solid rgba(#0D0D0D, 0.1);
-        margin: 2rem 0;
-    }
-
-    ul[data-type="taskList"] {
-        list-style: none;
-        padding: 0;
-
-        li {
-            align-items: center;
-            display: flex;
-
-            > label {
-                flex: 0 0 auto;
-                margin-right: 0.5rem;
-                user-select: none;
-            }
-
-            > div {
-                flex: 1 1 auto;
-            }
-        }
-    }
+  }
 
 }
 </style>
@@ -289,7 +306,6 @@ const json = () => {
 <!--        }-->
 <!--    }-->
 <!--}-->
-
 
 
 <!--/* Basic editor styles */-->
