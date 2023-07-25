@@ -7,17 +7,19 @@ import Cookies from "vue-cookies";
 import store from "@/stores/store";
 import 'element-plus/dist/index.css'
 import ElementPlus from 'element-plus'
+import {ElementTiptapPlugin} from "element-tiptap-vue3-fixed";
+import 'element-tiptap-vue3-fixed/lib/style.css'
 import "bootstrap/dist/css//bootstrap-utilities.css"
 import './assets/main.css'
 import { PrismEditor } from 'vue-prism-editor';
 import 'vue-prism-editor/dist/prismeditor.min.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-import 'element-tiptap/lib/index.css';
 
 const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(ElementPlus)
+app.use(ElementTiptapPlugin)
 app.component('PrismEditor', PrismEditor);
 app.mount('#app')
 

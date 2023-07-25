@@ -3,6 +3,7 @@ package com.example.first.controller;
 import com.example.first.config.AppConfig;
 import com.example.first.entity.UserSession;
 import com.example.first.request.Login;
+import com.example.first.response.AuthUser;
 import com.example.first.response.SessionResponse;
 import com.example.first.service.AuthService;
 import io.jsonwebtoken.Jwts;
@@ -95,9 +96,9 @@ public class AuthController {
     }
 
     @PostMapping("/auth/user/{service}")
-    public com.example.first.response.AuthUser authUser(@RequestBody com.example.first.response.AuthUser authUser, @PathVariable String service, UserSession userSession) {
+    public AuthUser authUser(@RequestBody AuthUser authUser, @PathVariable String service, UserSession userSession) {
         log.info(">>>auth/user/ {}", service);
-        com.example.first.response.AuthUser authedUser = authService.authUser(com.example.first.response.AuthUser.builder()
+        AuthUser authedUser = authService.authUser(AuthUser.builder()
                 .email(authUser.getEmail())
                 .postId(authUser.getPostId())
                 .userId(authUser.getUserId())
@@ -110,9 +111,9 @@ public class AuthController {
     }
 
     @PostMapping("/auth/signup/{service}")
-    public com.example.first.response.AuthUser authUser(@RequestBody com.example.first.response.AuthUser authUser, @PathVariable String service) {
+    public AuthUser authUser(@RequestBody AuthUser authUser, @PathVariable String service) {
         log.info("auth/signup/ {}", service);
-        com.example.first.response.AuthUser authedUser = authService.authUser(com.example.first.response.AuthUser.builder()
+        AuthUser authedUser = authService.authUser(AuthUser.builder()
                 .email(authUser.getEmail())
                 .name(authUser.getName())
                 .service(service)

@@ -10,6 +10,7 @@ import com.example.first.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -43,18 +44,18 @@ public class PostController {
 
     @PatchMapping("/posts/{postId}")
     public void edit(@RequestBody @Valid PostEdit postEdit, @PathVariable Long postId, UserSession userSession) {
-
         postService.edit(postId, postEdit);
-
     }
-
     @DeleteMapping("/posts/{postId}")
     public void delete(@PathVariable Long postId, UserSession userSession) {
-
         postService.delete(PostDelete.builder()
                 .postId(postId)
                 .userId(userSession.getUserId())
                 .build());
+    }
+    @PostMapping("/file")
+    public void file(){
+
     }
 }
 

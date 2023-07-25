@@ -27,11 +27,6 @@ import {BulletList} from "@tiptap/extension-bullet-list"
 import {OrderedList} from "@tiptap/extension-ordered-list"
 import {HardBreak} from "@tiptap/extension-hard-break"
 import {HorizontalRule} from "@tiptap/extension-horizontal-rule"
-import codemirror from "codemirror";
-import "codemirror/lib/codemirror.css"; // import base style
-import "codemirror/mode/xml/xml.js"; // language
-import "codemirror/addon/selection/active-line.js"; // require active-line.js
-import "codemirror/addon/edit/closetag.js";
 
 const provider = ref(null)
 const editor = ref(null)

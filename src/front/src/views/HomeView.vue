@@ -1,15 +1,11 @@
 <template>
-    <TiptapWrite :options="options"/>
+<!--    <TiptapWrite :options="options"/>-->
+    <Tiptap />
 </template>
 
 <script setup>
 import TiptapWrite from "@/components/TiptapWrite.vue";
-const options = {
-    content: ' ',
-    editable: true,
-    supportImage: true,
-    supportVideo: true
-}
+import Tiptap from "@/components/Tiptap/Tiptap.vue"
 
 </script>
 <style >

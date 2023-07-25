@@ -7,6 +7,7 @@ import com.example.first.repository.MybatisPostRepository;
 import com.example.first.repository.MybatisSessionRepository;
 import com.example.first.repository.MybatisUserRepository;
 import com.example.first.request.Login;
+import com.example.first.response.AuthUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,11 +37,11 @@ public class AuthService {
         return sessionRepository.findByAccessToken(userSession.getAccessToken()).orElseThrow(UnknownError::new);
     }
 
-    public com.example.first.response.AuthUser authUser(com.example.first.response.AuthUser authUser) {
+    public AuthUser authUser(AuthUser authUser) {
         switch (authUser.getService()) {
             case "post":
                 if(authUser.getUserId().equals(authUser.getAuthedUserId())){
-                    return com.example.first.response.AuthUser.builder()
+                    return AuthUser.builder()
                             .authResult(true)
                             .build();
                 }else {
@@ -51,11 +52,11 @@ public class AuthService {
                     throw new Unauthorized("이메일을 입력하세요.");
                 }
                 if (userRepository.findByEmail(authUser.getEmail()).isEmpty()) {
-                    return com.example.first.response.AuthUser.builder()
+                    return AuthUser.builder()
                             .authResult(true)
                             .build();
                 } else {
-                    return com.example.first.response.AuthUser.builder()
+                    return AuthUser.builder()
                             .authResult(false)
                             .build();
                 }
@@ -68,7 +69,7 @@ public class AuthService {
                         && !userRepository.findByName(authUser.getName()).orElseThrow().getEmail().equals(authUser.getEmail())){
                     throw new DuplicateEmail("중복된 닉네임입니다.");
                 }
-                    return com.example.first.response.AuthUser.builder()
+                    return AuthUser.builder()
                             .name(authUser.getName())
                             .authResult(true)
                             .build();
@@ -76,21 +77,21 @@ public class AuthService {
             case "password":
                 User user1 = userRepository.findById(authUser.getAuthedUserId()).orElseThrow(UserNotFound::new);
                 if(passwordEncoder.matches(authUser.getPassword(), user1.getPassword())){
-                    return com.example.first.response.AuthUser.builder()
+                    return AuthUser.builder()
                             .authResult(true)
                             .build();
                 } else {
-                    return com.example.first.response.AuthUser.builder()
+                    return AuthUser.builder()
                             .authResult(false)
                             .build();
                 }
             case "login":
-                return com.example.first.response.AuthUser.builder()
+                return AuthUser.builder()
                     .authResult(true)
                     .build();
             case "auth":
                 User authedUser =userRepository.findById(authUser.getAuthedUserId()).orElseThrow();
-                return com.example.first.response.AuthUser.builder()
+                return AuthUser.builder()
                         .email(authedUser.getEmail())
                         .name(authedUser.getName())
                         .authResult(true)
