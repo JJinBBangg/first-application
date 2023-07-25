@@ -25,7 +25,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 //    @Override
 //    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new Authintercetor())
+//        registry.addInterceptor(new AuthInterceptor())
 //                .excludePathPatterns("/error", "favicon.ico");
 ////                .excludePathPatterns("/test"); // 인터셉터에 인증되지 않도록 제외시킴 뛰어넘음 prehandle 실행안됨
 ////                .addPathPatterns() // 페턴 추가 등록

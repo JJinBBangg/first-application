@@ -56,7 +56,6 @@ axios.interceptors.response.use(
                     .post("api/auth/login/refresh", {}, {
                         headers: {
                             RefreshToken : refreshToken,
-
                         },
                     })
                     .then((response) => {
@@ -69,13 +68,17 @@ axios.interceptors.response.use(
                         if(refreshToken){ //
                             Cookies.set('refreshToken', refreshToken, 60*60*24*30);
                         }
-                        router.replace({ name: "home" });
-                        return null;
+                        // router.replace({ name: "/" });
+                        // return Promise.resolve(response);
+                        window.location.reload()
                     })
             } else {
-                store.commit("setToken", "");}
-                router.replace({ name: "home" });
+                store.commit("setToken", "");
+                Cookies.remove('accessToken'); // 쿠키에서 access token 값 삭제
+                Cookies.remove('refreshToken'); // 쿠키에서 refresh token 값 삭제
+                router.replace("/").then(()=>{window.location.reload();});
+            }
         }
-            return Promise.reject(error);
+        return Promise.reject(error);
     }
 )

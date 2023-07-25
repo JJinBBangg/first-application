@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 
 @Slf4j
-public class Authintercetor implements HandlerInterceptor {
+public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String accessToken = request.getParameter("accessToken");
