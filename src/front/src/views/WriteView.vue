@@ -20,8 +20,6 @@ import { ref } from 'vue';
 import router from "@/router";
 import Cookies from "vue-cookies";
 import {showCustomAlert} from "@/main";
-import { PrismEditor } from 'vue-prism-editor';
-import 'vue-prism-editor/dist/prismeditor.min.css'; // import the styles somewhere
 
 
 const form = ref({
@@ -54,9 +52,6 @@ const write = () => {
             }
         });
 };
-
-
-
 </script>
 
 <style>

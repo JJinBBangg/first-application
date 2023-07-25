@@ -8,11 +8,14 @@
         <svg class="remix">
             <use :xlink:href="`${remixIconUrl}#ri-${icon}`"/>
         </svg>
+
     </button>
 </template>
 
 <script setup>
 import remixIconUrl from 'remixicon/fonts/remixicon.symbol.svg'
+import axios from "axios";
+import {ref} from "vue";
 
 const props = defineProps({
     icon: {
@@ -32,6 +35,7 @@ const props = defineProps({
         default: null,
     },
 })
+
 </script>
 
 <style lang="scss">

@@ -1,8 +1,8 @@
 <template>
     <div>
         <template v-for="(item, index) in items">
-            <div class="divider" v-if="item.type === 'divider'" :key="`divider${index}`" />
-            <menu-item v-else :key="index" v-bind="item" />
+            <div class="divider" v-if="item.type === 'divider'" :key="`divider${index}`"/>
+            <menu-item v-else :key="index" v-bind="item"/>
         </template>
     </div>
 </template>
@@ -10,18 +10,17 @@
 <script>
 import MenuItem from './MenuItem.vue'
 
-export default {
-    components: {
-        MenuItem,
-    },
 
+export default {
     props: {
         editor: {
             type: Object,
             required: true,
         },
     },
-
+    components: {
+        MenuItem,
+    },
     data() {
         return {
             items: [
@@ -61,14 +60,14 @@ export default {
                 {
                     icon: 'h-1',
                     title: 'Heading 1',
-                    action: () => this.editor.chain().focus().toggleHeading({ level: 1 }).run(),
-                    isActive: () => this.editor.isActive('heading', { level: 1 }),
+                    action: () => this.editor.chain().focus().toggleHeading({level: 1}).run(),
+                    isActive: () => this.editor.isActive('heading', {level: 1}),
                 },
                 {
                     icon: 'h-2',
                     title: 'Heading 2',
-                    action: () => this.editor.chain().focus().toggleHeading({ level: 2 }).run(),
-                    isActive: () => this.editor.isActive('heading', { level: 2 }),
+                    action: () => this.editor.chain().focus().toggleHeading({level: 2}).run(),
+                    isActive: () => this.editor.isActive('heading', {level: 2}),
                 },
                 {
                     icon: 'paragraph',
@@ -144,18 +143,36 @@ export default {
                     title: 'Redo',
                     action: () => this.editor.chain().focus().redo().run(),
                 },
+                {
+                    icon: 'image-line',
+                    title: 'Image',
+                    action: () => {
+                        const url = window.prompt('URL')
+
+                        if (url) {
+                            this.editor.chain().focus().setImage({src: url}).run()
+                        }
+                    }
+                },
+                {
+                    icon: 'youtube-fill',
+                    title: 'Video',
+                    action: () => {
+                    }
+                },
             ],
         }
     },
+
 }
 </script>
 
 <style lang="scss">
 .divider {
-    background-color: rgba(#fff, 0.25);
-    height: 1.25rem;
-    margin-left: 0.5rem;
-    margin-right: 0.75rem;
-    width: 1px;
+  background-color: rgba(#fff, 0.25);
+  height: 1.25rem;
+  margin-left: 0.5rem;
+  margin-right: 0.75rem;
+  width: 1px;
 }
 </style>

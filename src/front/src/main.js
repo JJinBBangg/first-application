@@ -12,6 +12,7 @@ import './assets/main.css'
 import { PrismEditor } from 'vue-prism-editor';
 import 'vue-prism-editor/dist/prismeditor.min.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import 'element-tiptap/lib/index.css';
 
 const app = createApp(App)
 app.use(createPinia())
