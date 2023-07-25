@@ -42,7 +42,7 @@ const write = () => {
                 Authorization: token,
             },
         })
-        .then(() => {
+        .then(() => {13
             router.replace({ name: "post" });
         })
         .catch((error) => {

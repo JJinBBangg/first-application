@@ -1,6 +1,6 @@
 <template>
     <h1>제목</h1>
-    <el-input v-model="title"/>
+    <el-input v-model="title" placeholder="제목을 입력하세요."/>
     <h2>내용</h2>
         <el-tiptap
                 :width="700"
@@ -8,7 +8,7 @@
                 :extensions="extensions"
                 v-model:content="content"
                 :lang="ko"
-                placeholder="Write something ..."/>
+                placeholder="내용을 입력하세요."/>
     <el-button @click="write">작성완료</el-button>
 </template>
 
@@ -80,6 +80,21 @@ const content = ref([]);
 const modifiedHTML = ref("")
 const title = ref("")
 const write = () => {
+    const token = Cookies.get('accessToken')
+    axios.post("",{
+
+    },{
+        headers:{
+            Authorization : token
+        }
+    }).then((response)=>{
+        // response.data.
+    }).catch((error) => {
+        if (error.response) {
+            const errorMessage = error.response.data.message;
+            showCustomAlert(`${errorMessage}`)
+        }
+    });
     const parser = new DOMParser();
     const doc = parser.parseFromString(content.value, "text/html")
     console.log(doc)
@@ -116,7 +131,7 @@ onMounted(() => {
         }
     }).then((response) => {
         if (!response.data.authResult) {
-
+            console.log(response.data.authResult)
         }
     }).catch((error) => {
         if (error.response) {

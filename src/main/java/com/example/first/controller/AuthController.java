@@ -33,47 +33,14 @@ public class AuthController {
     public SessionResponse login(@RequestBody Login login) {
         UserSession logedinUserSession = authService.signIn(login);
 
-        String jws = Jwts.builder()
-                .setSubject(String.valueOf(logedinUserSession.getUserId()))
-                .signWith(appConfig.getKey())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + (30 * 60 * 1000L))) // 30분
-                .compact();
-
-        String refreshJws = Jwts.builder()
-                .setSubject(String.valueOf(logedinUserSession.getUserId()))
-                .signWith(appConfig.getKey())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + (30L * 24L * 60L * 60L * 1000L))) // 30일
-                .compact();
-
-        return SessionResponse.builder()
-                .accessToken(jws)
-                .refreshToken(refreshJws)
-                .build();
+        return getTokens(logedinUserSession);
     }
+
 
     @PostMapping("/auth/login/refresh")
     public SessionResponse refresh(UserSession userSession) {
+        return getTokens(userSession);
 
-        String jws = Jwts.builder()
-                .setSubject(String.valueOf(userSession.getUserId()))
-                .signWith(appConfig.getKey())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + (1800L * 1000L))) // 30분
-                .compact();
-
-        String refreshJws = Jwts.builder()
-                .setSubject(String.valueOf(userSession.getUserId()))
-                .signWith(appConfig.getKey())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + (30L * 24L * 60L * 60L * 1000L))) // 30일
-                .compact();
-
-        return SessionResponse.builder()
-                .accessToken(jws)
-                .refreshToken(refreshJws)
-                .build();
     }
 
     @PostMapping("/auth/logout")
@@ -120,7 +87,27 @@ public class AuthController {
                 .build());
         return authedUser;
     }
+    private SessionResponse getTokens(UserSession logedinUserSession) {
+        String jws = Jwts.builder()
+                .setSubject(String.valueOf(logedinUserSession.getUserId()))
+                .signWith(appConfig.getKey())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + (30 * 60 * 1000L))) // 30분
+                .compact();
 
+        String refreshJws = Jwts.builder()
+                .setSubject(String.valueOf(logedinUserSession.getUserId()))
+                .signWith(appConfig.getKey())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + (30L * 24L * 60L * 60L * 1000L))) // 30일
+                .compact();
+
+        return SessionResponse.builder()
+                .accessToken(jws)
+                .refreshToken(refreshJws)
+                .build();
+    }
+}
 //    @PostMapping("/auth/login")
 //    public ResponseEntity<Object> login(@RequestBody Login login, HttpSession session){ // todo HttpServletResponse 활용법 따로 공부하기
 //        UserSession logedinUserSession= authService.signIn(login);
@@ -138,7 +125,6 @@ public class AuthController {
 //                .build();
 //        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
 //    }
-}
 
 
 

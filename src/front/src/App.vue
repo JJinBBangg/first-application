@@ -1,7 +1,7 @@
 <script setup>
 import Header from "@/components/Header.vue";
 import Content from "@/components/Content.vue";
-import Footer from "@/components/Footer.vue";
+import SideBar from "@/components/SideBar.vue";
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import Footer from "@/components/Footer.vue";
         <Header class="header" />
         <div class="content-container">
             <Content />
-            <Footer />
+            <SideBar />
         </div>
     </div>
 </template>
@@ -29,8 +29,7 @@ import Footer from "@/components/Footer.vue";
 }
 
 .content-container {
-    display: flex;
-    margin-top: 80px; /* Adjust this value as needed for spacing below the header */
+    margin-top: 60px; /* Adjust this value as needed for spacing below the header */
 }
 
 body {
