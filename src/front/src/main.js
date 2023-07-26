@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios';
 import Cookies from "vue-cookies";
-import store from "@/stores/store";
+import stores from "@/stores/store";
 import 'element-plus/dist/index.css'
 import ElementPlus from 'element-plus'
 import {ElementTiptapPlugin} from "element-tiptap-vue3-fixed";
@@ -18,6 +18,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 const app = createApp(App)
 app.use(createPinia())
 app.use(router)
+app.use(stores)
 app.use(ElementPlus)
 app.use(ElementTiptapPlugin)
 app.component('PrismEditor', PrismEditor);
@@ -38,7 +39,7 @@ export const showCustomAlert = (message) => {
 
 const token = Cookies.get('accessToken');
 if (token) {
-    store.commit('setToken', token);
+    stores.commit('setToken', token);
 }
 axios.interceptors.response.use(
     response => response,
@@ -62,7 +63,7 @@ axios.interceptors.response.use(
                         const accessToken = response.data.accessToken;
                         if (accessToken) {
                             Cookies.set('accessToken', accessToken, 60*60);
-                            store.commit('setToken', accessToken);
+                            stores.commit('setToken', accessToken);
                         }
                         const refreshToken = response.data.refreshToken;
                         if(refreshToken){ //
@@ -73,7 +74,7 @@ axios.interceptors.response.use(
                         window.location.reload()
                     })
             } else {
-                store.commit("setToken", "");
+                stores.commit("setToken", "");
                 Cookies.remove('accessToken'); // 쿠키에서 access token 값 삭제
                 Cookies.remove('refreshToken'); // 쿠키에서 refresh token 값 삭제
                 router.replace("/").then(()=>{window.location.reload();});

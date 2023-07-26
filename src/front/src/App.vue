@@ -6,10 +6,14 @@ import SideBar from "@/components/SideBar.vue";
 
 <template>
     <div class="app-container">
-        <Header class="header" />
+        <Header class="header"/>
         <div class="content-container">
-            <Content />
-            <SideBar />
+            <div class="content">
+                <Content/>
+            </div>
+            <div class="sideBar">
+                <SideBar/>
+            </div>
         </div>
     </div>
 </template>
@@ -17,7 +21,7 @@ import SideBar from "@/components/SideBar.vue";
 <style scoped>
 .app-container {
     min-height: 100vh;
-    width: 100%;
+    width: 100vw;
 }
 
 .header {
@@ -27,8 +31,16 @@ import SideBar from "@/components/SideBar.vue";
     right: 0;
     z-index: 9999;
 }
-
+.content{
+    margin-left: 5vw;
+    width: 60vw;
+}
+.sideBar{
+    margin-right: 5vw;
+    width: 30vw;
+}
 .content-container {
+    display: inline-flex;
     margin-top: 60px; /* Adjust this value as needed for spacing below the header */
 }
 

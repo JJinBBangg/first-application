@@ -1,15 +1,14 @@
 <script setup>
 import axios from "axios";
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
+import { useStore} from "vuex";
 import {RouterLink} from "vue-router";
 import router from "@/router";
-import store from "@/stores/store";
 import Cookies from "vue-cookies";
 import {showCustomAlert} from "@/main";
 
 const currentPage = ref(1);
 const postsTotal = ref(0);
-
 const goToPage = (page) => {
     currentPage.value = page;
     fetchData();
@@ -31,6 +30,25 @@ const getNextPage = () => {
 const search = ref("");
 const type = ref('all');
 const posts = ref([]);
+const store = useStore();
+const storeType = computed(()=>{
+    return store.getters.getType
+})
+const storeSearch = computed(()=>{
+    return store.getters.getSearch
+})
+const check = watch(storeSearch, (newValue, oldValue)=>{
+  if(newValue !== oldValue){
+      console.log(storeSearch.value)
+      search.value = storeSearch.value
+      console.log(storeType.value)
+      type.value = storeType.value
+      console.log(currentPage.value)
+      fetchData()
+  }
+})
+
+
 
 const fetchData = () => {
     axios
@@ -70,20 +88,10 @@ const write = () => {
 // 초기 데이터 로딩
 fetchData();
 
-const totalPages = computed(() => Math.ceil(postsTotal.value / 10));
+const totalPages = computed(() => Math.ceil(postsTotal.value / 10)>10? 10:Math.ceil(postsTotal.value / 10));
 </script>
 
 <template>
-    <div class="search">
-        <select v-model="type">
-            <option value="all" label="전체"/>
-            <option value="title" label="제목"/>
-            <option value="content" label="내용"/>
-            <option value="writer" label="작성자"/>
-        </select>
-        <input type="text" v-model="search" placeholder="검색할 내용을 입력하세요." @keyup.enter="fetchData"/>
-        <button @click="fetchData">검색</button>
-    </div>
     <div class="posts">
         <ol>
             <li v-for="post in posts" :key="post.id">
@@ -93,7 +101,7 @@ const totalPages = computed(() => Math.ceil(postsTotal.value / 10));
                     </router-link>
                 </div>
                 <div class="content">
-                    내용 : {{ post.content }}
+                    <p class="content__detail">내용 : {{ post.content }}</p>
                     <p>
                         작성일 : {{ post.dateTime }}
                         작성자 : {{ post.name }}
@@ -117,21 +125,25 @@ const totalPages = computed(() => Math.ceil(postsTotal.value / 10));
         <el-button @click="getNextPage" :disabled="currentPage === totalPages">다음</el-button>
         <el-button @click="write" class="item">글 작성</el-button>
     </div>
-
 </template>
 
 <style scoped>
-.search {
-    position: fixed;
-    width: 50%;
-    border-radius: 5px;
-    z-index: 9999;
-    background-color: #74FF94;
-}
+/*.search {*/
+/*    position: fixed;*/
+/*    width: 80%;*/
+/*    border-radius: 5px;*/
+/*    z-index: 9999;*/
+/*}*/
 
 .posts {
-    width: 50%;
+    width: 80%;
     padding-top: 15px;
+}
+.content__detail{
+    white-space: pre-line;
+    overflow: hidden;
+    line-height: 1.2rem;
+    max-height: 6rem;
 }
 
 ol {
@@ -141,9 +153,9 @@ ol {
 
 .pagination {
     margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width : 80%;
+    /*justify-content: center;*/
+    /*align-items: center;*/
     flex-wrap: wrap;
 }
 
