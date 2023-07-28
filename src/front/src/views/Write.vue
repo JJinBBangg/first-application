@@ -105,6 +105,7 @@ const write = () => {
             // s3저장된 주소값으로 변경
         }
     }
+
     modifiedHTML.value = doc.body.innerHTML
     axios.post("/api/posts", {
         title : title.value,
