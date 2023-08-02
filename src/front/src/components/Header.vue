@@ -1,6 +1,6 @@
 <script setup>
 import {RouterLink} from "vue-router";
-import {computed, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {useStore} from "vuex";
 import stores from "@/stores/store";
 import Cookies from "vue-cookies";
@@ -23,10 +23,14 @@ const logout = function () {
 const type = ref("all")
 let search = ""
 const store = useStore();
+
 const submit = () => {
     store.dispatch('updateType', type)
     store.dispatch('updateSearch', search)
 }
+onMounted(()=>{
+
+})
 </script>
 <template>
     <el-header>
