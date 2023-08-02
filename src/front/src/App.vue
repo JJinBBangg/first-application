@@ -11,9 +11,9 @@ import SideBar from "@/components/SideBar.vue";
             <div class="content">
                 <Content/>
             </div>
-            <div class="sideBar">
-                <SideBar/>
-            </div>
+<!--            <div class="sideBar">-->
+<!--                <SideBar/>-->
+<!--            </div>-->
         </div>
     </div>
 </template>

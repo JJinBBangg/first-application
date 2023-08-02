@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import WriteView from "@/views/WriteView.vue";
+import WriteView from "@/views/Write.vue";
 import ReadView from "@/views/ReadView.vue";
 import EditView from "@/views/EditView.vue";
 import SignUpView from "@/views/SignUpView.vue";

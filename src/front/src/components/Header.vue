@@ -36,16 +36,16 @@ const submit = () => {
                     Home
                 </el-menu-item>
             </RouterLink>
-            <div class="search">
-                <select v-model="type">
-                    <option value="all" label="전체"/>
-                    <option value="title" label="제목"/>
-                    <option value="content" label="내용"/>
-                    <option value="writer" label="작성자"/>
-                </select>
-                <input type="text" v-model="search" placeholder="검색할 내용을 입력하세요." @keyup.enter="submit"/>
-                <button @click="submit">검색</button>
-            </div>
+<!--            <div class="search">-->
+<!--                <select v-model="type">-->
+<!--                    <option value="all" label="전체"/>-->
+<!--                    <option value="title" label="제목"/>-->
+<!--                    <option value="content" label="내용"/>-->
+<!--                    <option value="writer" label="작성자"/>-->
+<!--                </select>-->
+<!--                <input type="text" v-model="search" placeholder="검색할 내용을 입력하세요." @keyup.enter="submit"/>-->
+<!--                <button @click="submit">검색</button>-->
+<!--            </div>-->
             <div class="flex-grow"/>
             <RouterLink v-if="!isLoggedIn" to="/login">
                 <el-menu-item index="2">
